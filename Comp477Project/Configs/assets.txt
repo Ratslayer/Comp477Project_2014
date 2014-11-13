@@ -1,0 +1,9 @@
+#folders used for loading asset classes
+Assets=Assets
+Mesh=Meshes
+VertexShader=Shaders\Vertex
+FragmentShader=Shaders\Fragment
+Texture=Textures
+Model=Models
+Material=Materials
+Scene=Scenes

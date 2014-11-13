@@ -1,0 +1,2 @@
+mesh=box.ASE
+material=gay.txt

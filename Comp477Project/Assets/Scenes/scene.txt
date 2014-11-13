@@ -1,0 +1,19 @@
+#main camera
+[camera]
+name=MainCamera
+position=0 30 20
+lookat=0 0 0
+fovy=90
+nearz=1
+farz=1000
+#basic sphere
+[gameobject]
+name=Sphere
+position=0 10 0
+model=ball.txt
+scale=3 3 3
+[gameobject]
+name=Floor
+position=0 0 0
+model=box.txt
+scale=100 1 100

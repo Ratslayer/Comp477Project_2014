@@ -1,0 +1,3 @@
+#test ball model
+Mesh=sphere.ASE
+Material=checker.txt

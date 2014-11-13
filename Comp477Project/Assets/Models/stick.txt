@@ -1,0 +1,2 @@
+mesh=cylinder.ASE
+material=checker.txt
