@@ -13,7 +13,17 @@ position=0 10 0
 model=ball.txt
 scale=3 3 3
 [gameobject]
+name=SkyBox
+position=0 0 0
+model=ball.txt
+scale=500 500 500
+[gameobject]
 name=Floor
 position=0 0 0
 model=box.txt
 scale=100 1 100
+[light]
+name=Light0
+position=30 30 0
+color=1 0.8 0.5
+brightness=1

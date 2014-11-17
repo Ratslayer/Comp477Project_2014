@@ -41,11 +41,17 @@ void Scene::loadActor(string className, string content)
 	{
 		load<Camera, CameraDesc>(content);
 	}
+	if (lcName == "light")
+	{
+		load<Light, LightDesc>(content);
+	}
 }
 
 void Scene::draw(Effect *effect)
 {
 	pCamera->bind(effect);
+	Light* light = getActor<Light>("Light0");
+	light->bind(effect);
 	vector<GameObject*> objects = getAllObjects();
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{

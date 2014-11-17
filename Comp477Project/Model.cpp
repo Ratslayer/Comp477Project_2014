@@ -23,5 +23,5 @@ void Model::loadFromFile(string fileName)
 void Model::draw(Effect* effect)
 {
 	pMaterial->bind(effect);
-	effect->draw(pMesh);
+	pMesh->draw(effect);
 }

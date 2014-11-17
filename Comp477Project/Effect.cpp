@@ -77,30 +77,32 @@ Effect::~Effect()
 		glDeleteProgram(program);
 	}
 }
-
-void Effect::draw(Mesh *mesh)
-{
-	GLint attrib;
-	attrib = glGetAttribLocation(program, "position");
-	if (attrib != -1)
-		mesh->BindVertices(attrib);
-	attrib = glGetAttribLocation(program, "texCoord");
-	if (attrib != -1)
-		mesh->BindTexCoords(attrib);
-	attrib = glGetAttribLocation(program, "normal");
-	if (attrib != -1)
-		mesh->BindNormals(attrib);
-	attrib = glGetAttribLocation(program, "binormal");
-	if (attrib != -1)
-		mesh->BindBinormals(attrib);
-	mesh->draw();
-}
-
 void Effect::loadMatrices(mat44 &world, mat44 &view, mat44 &proj)
 {
 	getParam("mWorld") = world;
 	getParam("mView") = view;
 	getParam("mProjection") = proj;
+}
+
+GLuint Effect::getAttribute(char* cname)
+{
+	GLint attrib;
+	attrib = glGetAttribLocation(program, cname);
+	return attrib;
+}
+
+bool Effect::hasParam(char* cname)
+{
+	bool result = false;
+	for (unsigned int i = 0; i < params.size(); i++)
+	{
+		if (params[i].name == cname)
+		{
+			result = true;
+			break;
+		}
+	}
+	return result;
 }
 
 Effect::Parameter::Parameter(std::string &paramName, GLint program)
@@ -184,7 +186,7 @@ void Effect::Parameter::operator=(Texture* tex)
 	if (assertType(PT_TEX2D))
 	{
 		glUniform1i(paramLoc, tex->unitOffset);
-		glActiveTexture(GL_TEXTURE0+tex->unitOffset);
+		glActiveTexture(GL_TEXTURE0 + tex->unitOffset);
 		glBindTexture(GL_TEXTURE_2D, tex->getTextureID());
 		//glBindSampler(0, linearFiltering);
 		//glProgramUniform1i(tex->getTextureID(), paramLoc, 0);

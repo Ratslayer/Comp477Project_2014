@@ -1,0 +1,19 @@
+uniform vec3 f3LightPos;
+uniform vec3 f3LightColor;
+uniform float fBrightness;
+uniform vec3 f3CameraPos;
+uniform sampler2D t2Texture;
+
+varying vec3 fPosition;
+varying vec3 fNormal;
+void main()
+{
+	vec3 normalDir=normalize(fNormal);
+	vec3 viewDir=normalize(fPosition-f3CameraPos);
+	vec3 lightDir=normalize(fPosition-f3LightPos);
+	vec3 lighting=f3LightColor * dot(normalDir, lightDir) * fBrightness;
+	vec3 hn=normalize(viewDir+lightDir);
+	float specular=pow(dot(normalDir, hn), 55.0);
+	gl_FragColor=texture2D(t2Texture,gl_TexCoord[0].st)*vec4(lighting, 1)
+			+vec4(specular, specular, specular, 0);
+}

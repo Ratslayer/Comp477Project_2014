@@ -41,12 +41,13 @@ void Camera::bind(Effect *effect)
 {
 	effect->getParam("mView") = getView();
 	effect->getParam("mProjection") = getPerspective();
+	effect->safeSetParam<vec3>("f3CameraPos", getPosition());
 }
 
 void Camera::loadFromDesc(ActorDesc &desc)
 {
 	Actor::loadFromDesc(desc);
-	CameraDesc &cDesc = dynamic_cast<CameraDesc&>(desc);
+	CameraDesc& cDesc=castDesc<CameraDesc>(desc);
 	fovy = cDesc.fovy;
 	nearZ = cDesc.nearZ;
 	farZ = cDesc.farZ;

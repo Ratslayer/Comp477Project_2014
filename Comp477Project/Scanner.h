@@ -17,6 +17,8 @@ public:
 	vector<string> splitContent(char delim);
 	float getFloat();
 	unsigned int getUInt();
+	vec3 getVec3();
+	vec2 getVec2();
 	//bindings functions
 private:
 	void loadData(string file);

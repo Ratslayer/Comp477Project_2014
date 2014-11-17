@@ -29,3 +29,11 @@ void Vec2::operator/=(float f)
 	x /= f;
 	y /= f;
 }
+
+Vec2 Vec2::operator-(Vec2 &v)
+{
+	vec2 r;
+	r.x = x - v.x;
+	r.y = y - v.y;
+	return r;
+}

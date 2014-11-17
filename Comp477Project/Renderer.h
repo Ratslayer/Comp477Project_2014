@@ -25,6 +25,8 @@ namespace MyNamespace
 		//Mesh* mesh;
 		void draw2DVertex(float x, float y);
 		void drawFullscreenQuad();
+		void drawScene(Scene* scene, Effect* effect, FrameBuffer *buffer);
+		void drawLines(vector<vec3> vertices, vec3 color);
 	public:
 		Renderer();
 		~Renderer();

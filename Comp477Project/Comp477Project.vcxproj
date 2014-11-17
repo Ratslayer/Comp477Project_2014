@@ -87,6 +87,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="BindingCollection.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ColorDepthBuffer.h" />
     <ClInclude Include="ConfigScanner.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="FileHelper.h" />
@@ -94,6 +95,7 @@
     <ClInclude Include="FrameBuffer.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="KinectController.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Mat44.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="math.h" />
@@ -118,6 +120,7 @@
     <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BindingCollection.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ColorDepthBuffer.cpp" />
     <ClCompile Include="Comp477Project.cpp" />
     <ClCompile Include="ConfigScanner.cpp" />
     <ClCompile Include="Effect.cpp" />
@@ -126,6 +129,7 @@
     <ClCompile Include="FrameBuffer.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="KinectController.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Mat44.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Mesh.cpp" />

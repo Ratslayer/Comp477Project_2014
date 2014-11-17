@@ -1,14 +1,15 @@
-﻿Build started 11/7/2014 2:35:41 PM.
+﻿Build started 11/16/2014 1:09:10 PM.
      1>Project "C:\Users\Ratslayer\documents\visual studio 2013\Projects\Comp477Project\Comp477Project\Comp477Project.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Comp477Project.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt KinectController.cpp
-         KinectController.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Comp477Project.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
+         Renderer.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ratslayer\documents\visual studio 2013\Projects\Comp477Project\Debug\Comp477Project.exe" /INCREMENTAL /NOLOGO Release/Win32/glew32.lib DevIL.lib ILU.lib ILUT.lib x86/Kinect20.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Ratslayer\documents\visual studio 2013\Projects\Comp477Project\Debug\Comp477Project.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ratslayer\documents\visual studio 2013\Projects\Comp477Project\Debug\Comp477Project.lib" /MACHINE:X86 Debug\Actor.obj
          Debug\Asset.obj
          Debug\AssetManager.obj
          Debug\BindingCollection.obj
          Debug\Camera.obj
+         Debug\ColorDepthBuffer.obj
          Debug\Comp477Project.obj
          Debug\ConfigScanner.obj
          Debug\Effect.obj
@@ -17,6 +18,7 @@
          Debug\FrameBuffer.obj
          Debug\GameObject.obj
          Debug\KinectController.obj
+         Debug\Light.obj
          Debug\Mat44.obj
          Debug\Material.obj
          Debug\Mesh.obj
@@ -37,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.60
+Time Elapsed 00:00:01.58

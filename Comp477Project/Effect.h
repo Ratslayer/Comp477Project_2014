@@ -1,7 +1,7 @@
 #pragma once
 #include "stdafx.h"
-#include "AssetManager.h"
-#include "Mesh.h"
+//#include "AssetManager.h"
+#include "Texture.h"
 #include "VertexShader.h"
 #include "FragmentShader.h"
 class Effect
@@ -45,9 +45,15 @@ public:
 	~Effect();
 	void Bind();
 	Parameter& getParam(char* cname);
+	bool hasParam(char* cname);
+	template<typename T>
+	void safeSetParam(char* cname, T &value)
+	{
+		if (hasParam(cname))
+			getParam(cname) = value;
+	}
 	GLuint getAttribute(char* cname);
 	void loadMatrices(mat44 &world, mat44 &view, mat44 &proj);
-	void draw(Mesh *mesh);
 private: 
 	void loadAllParams();
 	std::vector<Parameter> params;

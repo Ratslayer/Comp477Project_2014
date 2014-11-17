@@ -40,7 +40,7 @@ void GameObject::setScale(real s)
 void GameObject::loadFromDesc(ActorDesc &desc)
 {
 	Actor::loadFromDesc(desc);
-	GameObjectDesc &goDesc = dynamic_cast<GameObjectDesc&>(desc);
+	GameObjectDesc &goDesc = castDesc<GameObjectDesc>(desc);
 	pModel = AssetManager::load<Model>(goDesc.modelName);
 	setScale(goDesc.scale);
 }
@@ -53,6 +53,5 @@ GameObjectDesc::GameObjectDesc(string data)
 	:ActorDesc(data)
 {
 	modelName = bindings.get("model");
-	//bindings.getPrimitive<bool>("isBlue");
 	scale = bindings.getVec3("scale");
 }

@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Renderer.h"
 #include "Window.h"
+#include "ColorDepthBuffer.h"
 using namespace MyNamespace;
 Renderer* Renderer::_renderer = NULL;
 Renderer::Renderer()
@@ -9,14 +10,14 @@ Renderer::Renderer()
 	//shaderDesc.vertexFileName = "vertex1";
 	//shaderDesc.fragmentFileName = "basic";
 	//pEffect = new Effect("vertex1.txt", "color.txt");
-	pEffect = new Effect("vertex1.txt", "texture.txt");
+	pEffect = new Effect("normalTexture.txt", "phongTexture.txt");
 	pPostProcessEffect = new Effect("directTexture.txt", "colorTexture.txt");
 	pScene = AssetManager::load<Scene>("scene.txt");
 	pKinect = new KinectController();
 	FBODesc desc;
 	desc.width = 1024;
 	desc.height = 768;
-	pBuffer = new FrameBuffer(desc);
+	pBuffer = new ColorDepthBuffer(1024, 768);
 	//texture = AssetManager::load<Texture>("checker.jpg");
 	//mesh = AssetManager::load<Mesh>("sphere_1.ASE");
 	/*pObject = new GameObject("ball.txt");
@@ -41,17 +42,17 @@ Renderer::~Renderer()
 }
 void Renderer::draw()
 {
-	pBuffer->unbind();
+	/*pBuffer->unbind();
 	bindBackBuffer();
 	glColor3f(1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	pKinect->Update();*/
 	//drawFullscreenQuad();
 	//bindBackBuffer();
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//pEffect->Bind();
+	//
 	//pScene->pCamera->bind(pEffect);
-	pKinect->Update();
+
 	//glEnable(GL_LINE_SMOOTH);
 	//glLineWidth(3);
 	/*glBegin(GL_LINES);
@@ -61,9 +62,14 @@ void Renderer::draw()
 	glEnd();*/
 	//glColor3f(1, 1, 1);
 	//drawFullscreenQuad();
-	//pBuffer->bind();
-	//bindBackBuffer();
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	drawScene(pScene, pEffect, pBuffer);
+
+
+	bindBackBuffer();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	pPostProcessEffect->Bind();
+	pPostProcessEffect->getParam("t2Texture") = pBuffer->getColor(0);
+	drawFullscreenQuad();
 	//pEffect->Bind();
 	//pScene->draw(pEffect);
 	//pBuffer->unbind();
@@ -113,4 +119,25 @@ void MyNamespace::Renderer::drawFullscreenQuad()
 void MyNamespace::Renderer::bindBackBuffer()
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void MyNamespace::Renderer::drawScene(Scene* scene, Effect* effect, FrameBuffer *buffer)
+{
+	buffer->bind();
+	glEnable(GL_FRONT_AND_BACK);
+	effect->Bind();
+	scene->draw(effect);
+	buffer->unbind();
+}
+
+void MyNamespace::Renderer::drawLines(vector<vec3> vertices, vec3 color)
+{
+	glBegin(GL_LINES);
+	glColor3f(color.x, color.y, color.z);
+	for (unsigned int i = 0; i < vertices.size(); i++)
+	{
+		vec3 vertex = vertices[i];
+		glVertex3f(vertex.x, vertex.y, vertex.z);
+	}
+	glEnd();
 }

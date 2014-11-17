@@ -2,17 +2,19 @@
 #include "Asset.h"
 #include "Scanner.h"
 #include <sstream>
+#include "Effect.h"
 using namespace std;
 class Mesh : public Asset
 {
 public:
-	void BindVertices(GLuint attribPos);
-	void BindTexCoords(GLuint attribPos);
-	void BindNormals(GLuint attribPos);
-	void BindBinormals(GLuint attribPos);
 	Mesh();
 	~Mesh();
-	void draw();
+	/*void BindVertices(GLuint attribPos);
+	void BindTexCoords(GLuint attribPos);
+	void BindNormals(GLuint attribPos);
+	void BindTangents(GLuint attribPos);*/
+	
+	void draw(Effect* effect);
 	void loadFromFile(std::string fileName);
 	string getClassName(){ return "Mesh"; }
 protected:
@@ -22,10 +24,11 @@ private:
 	vector<float> getTexCoords(vector<pair<unsigned int, unsigned int>> &indexPairs, vector<float> &rawTexCoords, unsigned int numVertices);
 	//bind VBOpos to attribPos
 	//attribSize is the number of float components in every element of VBO
-	void createVBOs(vector<float> &vertices, vector<float> &texCoords, vector<float> &normals, vector<unsigned int> &indices);
+	void createVBOs(vector<vec3> &vertices, vector<vec2> &texCoords, vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents, vector<unsigned int> &indices);
 	void bindVBO(GLuint VBOpos, GLuint attribPos, int attribSize);
+	void deleteVBO(GLuint iVBO);
 	void loadASEFile(string fileName);
-	void loadObjFile(string fileName);
+	//void loadObjFile(string fileName);
 	template <typename T>
 	void readVector(istringstream &content, vector<T> &data, int numElements)
 	{
@@ -43,14 +46,16 @@ private:
 		glBindBuffer(GL_ARRAY_BUFFER, *iVBO);
 		glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(T), data.data(), usageVBO);
 	}
-	void unifyIndices(vector<float> &vertices, vector<float> &texCoords, vector<unsigned int> &indices, vector<unsigned int> &tcIndices);
+	void unifyIndices(vector<vec3> &vertices, vector<vec2> &texCoords, vector<unsigned int> &indices, vector<unsigned int> &tcIndices);
+	void generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices, vector<vec2> &texCoords,vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents);
 	//static void readVector(istringstream &content, vec3 &v);
 	//static void readVector(istringstream &content, vec2 &v);
-	void deleteVBO(GLuint iVBO);
+	
 	GLuint iVerticesVBO;
 	GLuint iTexCoordsVBO;
 	GLuint iNormalsVBO;
-	GLuint iBinormalsVBO;
+	GLuint iTangentsVBO;
+	GLuint iBitangentsVBO;
 	GLuint iIndicesVBO;
 	int numIndices = 0;
 };

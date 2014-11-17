@@ -4,15 +4,15 @@
 Mesh::Mesh()
 	:Asset()
 {
-	iVerticesVBO = iBinormalsVBO = iTexCoordsVBO = iNormalsVBO = iIndicesVBO = 0;
-	//loadASEFile(fileName);
+	iVerticesVBO = iTangentsVBO = iBitangentsVBO = iTexCoordsVBO = iNormalsVBO = iIndicesVBO = 0;
 }
 Mesh::~Mesh()
 {
 	deleteVBO(iVerticesVBO);
-	deleteVBO(iNormalsVBO);
 	deleteVBO(iTexCoordsVBO);
-	deleteVBO(iBinormalsVBO);
+	deleteVBO(iNormalsVBO);
+	deleteVBO(iTangentsVBO);
+	deleteVBO(iBitangentsVBO);
 	deleteVBO(iIndicesVBO);
 }
 void Mesh::loadFromFile(std::string fileName)
@@ -20,15 +20,15 @@ void Mesh::loadFromFile(std::string fileName)
 	Asset::loadFromFile(fileName);
 	loadASEFile(fileName);
 }
-void Mesh::loadObjFile(string fileName)
+/*void Mesh::loadObjFile(string fileName)
 {
 	ifstream fileStream(fileName);
 	if (fileStream.is_open())
 	{
-		vector<float> vertices;
-		vector<float> texCoords;
-		vector<float> rawTexCoords;
-		vector<float> normals;
+		vector<vec3> vertices;
+		vector<vec2> texCoords;
+		vector<vec2> rawTexCoords;
+		vector<vec3> normals;
 		//vector<vec3> binormals;
 		vector<pair<unsigned int, unsigned int>> indexPairs;
 		vector<unsigned int> indices;
@@ -73,39 +73,26 @@ void Mesh::loadObjFile(string fileName)
 					content >> index;
 					indices.push_back(index);
 				}*/
-			}
-		}
+		//	}
+		//}
 		/*for (int i = 0; i < rawTexCoords.size() / 2; i++)
 		{
 			rawTexCoords[i + 1] = 1 - rawTexCoords[i + 1];
 		}*/
-		texCoords = rawTexCoords;//getTexCoords(indexPairs, rawTexCoords, vertices.size()/3);
-		createVBOs(vertices, texCoords, normals, indices);
-		//createVBO<vec3>(binormals, &iBinormalsVBO);
+		//texCoords = rawTexCoords;//getTexCoords(indexPairs, rawTexCoords, vertices.size()/3);
+		/*createVBOs(vertices, texCoords, normals, indices);
+		createVBO<vec3>(binormals, &iBinormalsVBO);
 	}
 
-}
+}*/
 void Mesh::bindVBO(GLuint VBOpos, GLuint attribPos, int attribSize)
 {
-	glBindBuffer(GL_ARRAY_BUFFER, VBOpos);
-	glEnableVertexAttribArray(attribPos);
-	glVertexAttribPointer(attribPos, attribSize, GL_FLOAT, false, 0, 0);
-}
-void Mesh::BindVertices(GLuint attribPos)
-{
-	bindVBO(iVerticesVBO, attribPos, 3);
-}
-void Mesh::BindTexCoords(GLuint attribPos)
-{
-	bindVBO(iTexCoordsVBO, attribPos, 2);
-}
-void Mesh::BindNormals(GLuint attribPos)
-{
-	bindVBO(iNormalsVBO, attribPos, 3);
-}
-void Mesh::BindBinormals(GLuint attribPos)
-{
-	bindVBO(iBinormalsVBO, attribPos, 3);
+	if (attribPos != -1)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, VBOpos);
+		glEnableVertexAttribArray(attribPos);
+		glVertexAttribPointer(attribPos, attribSize, GL_FLOAT, false, 0, 0);
+	}
 }
 void Mesh::deleteVBO(GLuint iVBO)
 {
@@ -113,12 +100,14 @@ void Mesh::deleteVBO(GLuint iVBO)
 		glDeleteBuffers(1, &iVBO);
 }
 
-void Mesh::draw()
+void Mesh::draw(Effect* effect)
 {
-	/*BindVertices(effect->getAttribute("position"));
-	BindTexCoords(effect->getAttribute("texCoords"));
-	BindNormals(effect->getAttribute("normal"));
-	BindBinormals(effect->getAttribute("binormal"));*/
+	bindVBO(iVerticesVBO, effect->getAttribute("position"), 3);
+	bindVBO(iTexCoordsVBO, effect->getAttribute("texCoord"), 2);
+	bindVBO(iNormalsVBO, effect->getAttribute("normal"), 3);
+	bindVBO(iTangentsVBO, effect->getAttribute("tangent"), 3);
+	bindVBO(iBitangentsVBO, effect->getAttribute("bitangent"), 3);
+
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iIndicesVBO);
 	glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_INT, 0);
 }
@@ -158,16 +147,18 @@ vec2 Mesh::getAverageTexCoord(unsigned int index, vector<pair<unsigned int, unsi
 void Mesh::loadASEFile(string fileName)
 {
 	Scanner sc(fileName);
-	vector<float> vertices;
-	vector<float> texCoords;
-	vector<float> normals;
+	vector<vec3> vertices;
+	vector<vec2> texCoords;
+	vector<vec3> normals, tangents, bitangents;
 	vector<unsigned int> indices;
 	vector<unsigned int> tcIndices;
 	//get translation 
-	float translation[3];
+	//float translation[3];
+	vec3 translation;
 	sc.jumpAfter("TM_ROW3");
-	for (int i = 0; i < 3; i++)
-		translation[i] = sc.getFloat();
+	//for (int i = 0; i < 3; i++)
+	//	translation[i] = sc.getFloat();
+	translation = sc.getVec3();
 	//get size of model
 	unsigned int numVertices, numFaces;
 	sc.jumpAfter("MESH_NUMVERTEX");
@@ -180,8 +171,10 @@ void Mesh::loadASEFile(string fileName)
 	{
 		sc.jumpAfter("MESH_VERTEX");
 		unsigned int id=sc.getUInt();
-		for (int j = 0; j < 3; j++)
-			vertices.push_back(sc.getFloat() - translation[j]);
+		vec3 vertex = sc.getVec3() - translation;
+		vertices.push_back(vertex);
+		//for (int j = 0; j < 3; j++)
+		//	vertices.push_back(sc.getFloat() - translation[j]);
 	}
 	//get faces
 	sc.jumpAfter("MESH_FACE_LIST");
@@ -203,8 +196,10 @@ void Mesh::loadASEFile(string fileName)
 	{
 		sc.jumpAfter("MESH_TVERT");
 		sc.getUInt();
-		texCoords.push_back(sc.getFloat());
-		texCoords.push_back(sc.getFloat());
+		vec2 tc = sc.getVec2();
+		texCoords.push_back(tc);
+		//texCoords.push_back(sc.getFloat());
+		//texCoords.push_back(sc.getFloat());
 	}
 	sc.jumpAfter("MESH_NUMTVFACES");
 	unsigned int numTcIndices = sc.getUInt();
@@ -217,33 +212,68 @@ void Mesh::loadASEFile(string fileName)
 			tcIndices.push_back(sc.getUInt());
 	}
 	unifyIndices(vertices, texCoords, indices, tcIndices);
-	createVBOs(vertices, texCoords, normals, indices);
+	generateNormals(vertices, indices, texCoords, normals, tangents, bitangents);
+	createVBOs(vertices, texCoords, normals, tangents, bitangents, indices);
 }
 
-void Mesh::createVBOs(vector<float> &vertices, vector<float> &texCoords, vector<float> &normals, vector<unsigned int> &indices)
+void Mesh::createVBOs(vector<vec3> &vertices, vector<vec2> &texCoords, vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents, vector<unsigned int> &indices)
 {
-	createVBO<float>(vertices, &iVerticesVBO);
-	createVBO<float>(texCoords, &iTexCoordsVBO);
-	createVBO<float>(normals, &iNormalsVBO);
+	createVBO<vec3>(vertices, &iVerticesVBO);
+	createVBO<vec2>(texCoords, &iTexCoordsVBO);
+	createVBO<vec3>(normals, &iNormalsVBO);
+	createVBO<vec3>(tangents, &iTangentsVBO);
+	createVBO<vec3>(bitangents, &iBitangentsVBO);
 	createVBO<unsigned int>(indices, &iIndicesVBO);
 	numIndices = indices.size();
 }
 
-void Mesh::unifyIndices(vector<float> &vertices, vector<float> &texCoords, vector<unsigned int> &indices, vector<unsigned int> &tcIndices)
+void Mesh::unifyIndices(vector<vec3> &vertices, vector<vec2> &texCoords, vector<unsigned int> &indices, vector<unsigned int> &tcIndices)
 {
-	vector<float> newVertices, newTexCoords;
+	vector<vec3> newVertices;
+	vector<vec2> newTexCoords;
 	vector<unsigned int> newIndices;
 	for (unsigned int i = 0; i < indices.size(); i++)
 	{
-		for (int j = 0; j < 3; j++)
+		/*for (int j = 0; j < 3; j++)
 			newVertices.push_back(vertices[indices[i] * 3 + j]);
 		for (int j = 0; j < 2; j++)
-			newTexCoords.push_back(texCoords[tcIndices[i] * 2 + j]);
+			newTexCoords.push_back(texCoords[tcIndices[i] * 2 + j]);*/
+		newVertices.push_back(vertices[indices[i]]);
+		newTexCoords.push_back(texCoords[tcIndices[i]]);
 	}
 	for (unsigned int i = 0; i < newVertices.size(); i++)
 		newIndices.push_back(i);
 	vertices = newVertices;
 	texCoords = newTexCoords;
 	indices = newIndices;
+}
+
+void Mesh::generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices, vector<vec2> &texCoords, vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents)
+{
+	normals = tangents = bitangents = vector<vec3>(vertices.size(), vec3(0, 0, 0));
+	for (unsigned int i = 0; i < indices.size()-2; i += 3)
+	{
+		unsigned int id_0 = indices[i], id_1 = indices[i + 1], id_2 = indices[i + 2];
+		vec3 edge_1 = vertices[id_1] - vertices[id_0];
+		vec3 edge_2 = vertices[id_2] - vertices[id_0];
+
+		vec2 tedge_1 = texCoords[id_0] - texCoords[id_1];
+		vec2 tedge_2 = texCoords[id_0] - texCoords[id_2];
+
+		vec3 normal = edge_1.cross(edge_2);
+		vec3 tangent((tedge_2.y * edge_1.x - tedge_1.y * edge_2.x),
+			(tedge_2.y * edge_1.y - tedge_1.y * edge_2.y),
+			(tedge_2.y * edge_1.z - tedge_1.y * edge_2.z));
+
+		vec3 bitangent = tangent.cross(normal);
+
+		normal.normalize();
+		tangent.normalize();
+		bitangent.normalize();
+
+		normals[id_0] = normal;
+		tangents[id_0] = tangent;
+		bitangents[id_0] = bitangent;
+	}
 }
 

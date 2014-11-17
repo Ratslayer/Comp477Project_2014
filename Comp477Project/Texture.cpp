@@ -43,3 +43,10 @@ GLuint Texture::getTextureID()
 {
 	return textureID;
 }
+
+TextureDesc::TextureDesc()
+{
+	width = height = 0;
+	format = GL_RGBA;
+	internalFormat = GL_RGBA8;
+}

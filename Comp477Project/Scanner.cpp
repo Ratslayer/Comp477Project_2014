@@ -103,3 +103,20 @@ bool Scanner::lcEquals(string str1, string str2)
 	bool result = Scanner::toLower(str1) == Scanner::toLower(str2);
 	return result;
 }
+
+vec3 Scanner::getVec3()
+{
+	vec3 v;
+	v.x = getFloat();
+	v.y = getFloat();
+	v.z = getFloat();
+	return v;
+}
+
+vec2 Scanner::getVec2()
+{
+	vec2 v;
+	v.x = getFloat();
+	v.y = getFloat();
+	return v;
+}

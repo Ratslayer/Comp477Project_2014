@@ -14,7 +14,7 @@ class Asset
 {
 public:
 	Asset();
-	~Asset();
+	virtual ~Asset();
 	std::string fileName;
 	virtual std::string getClassName() = NULL;
 	virtual void loadFromFile(std::string fileName);

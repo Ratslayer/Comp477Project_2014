@@ -3,6 +3,7 @@
 #include "Asset.h"
 #include "Actor.h"
 #include "Camera.h"
+#include "Light.h"
 #include "GameObject.h"
 #include "Effect.h"
 class Scene
@@ -20,6 +21,20 @@ public:
 
 	Camera* getCamera(string name);
 	vector<GameObject*> getAllObjects();
+	template<typename T> 
+	T* getActor(string name)
+	{
+		T* actor = nullptr;
+		for (unsigned int i = 0; i < actors.size(); i++)
+		{
+			if (actors[i]->name == name)
+			{
+				actor = dynamic_cast<T*>(actors[i]);
+				break;
+			}
+		}
+		return actor;
+	}
 	void loadActor(string className, string content);
 
 	template<typename classType, typename descType>
