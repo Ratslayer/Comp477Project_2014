@@ -18,6 +18,7 @@ Renderer::Renderer()
 	desc.width = 1024;
 	desc.height = 768;
 	pBuffer = new ColorDepthBuffer(1024, 768);
+	pBuffer->unbind();
 	//texture = AssetManager::load<Texture>("checker.jpg");
 	//mesh = AssetManager::load<Mesh>("sphere_1.ASE");
 	/*pObject = new GameObject("ball.txt");
@@ -42,44 +43,18 @@ Renderer::~Renderer()
 }
 void Renderer::draw()
 {
-	/*pBuffer->unbind();
-	bindBackBuffer();
-	glColor3f(1, 1, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	pKinect->Update();*/
-	//drawFullscreenQuad();
-	//bindBackBuffer();
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//
-	//pScene->pCamera->bind(pEffect);
-
-	//glEnable(GL_LINE_SMOOTH);
-	//glLineWidth(3);
-	/*glBegin(GL_LINES);
-	glVertex3f(-1, -1, 0);
-	glVertex3f(1, 1, 0);
-	//glVertex3f(-1, 1, 0);
-	glEnd();*/
-	//glColor3f(1, 1, 1);
-	//drawFullscreenQuad();
 	drawScene(pScene, pEffect, pBuffer);
-
-
 	bindBackBuffer();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	pPostProcessEffect->Bind();
 	pPostProcessEffect->getParam("t2Texture") = pBuffer->getColor(0);
-	drawFullscreenQuad();
-	//pEffect->Bind();
-	//pScene->draw(pEffect);
-	//pBuffer->unbind();
-
+	drawFullscreenQuad();	
+	//kinect skeleton rendering
 	/*bindBackBuffer();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	pPostProcessEffect->Bind();
-	pPostProcessEffect->getParam("t2Texture") = pBuffer;
-	drawFullscreenQuad();*/
-	
+	pKinect->Update();
+	vector<vec3> vertices = pKinect->getJointVertices();
+	drawLines(vertices, vec3(1, 1, 1));*/
 	glutSwapBuffers();
 }
 void Renderer::init()

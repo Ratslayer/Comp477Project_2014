@@ -48,6 +48,8 @@ private:
 	}
 	void unifyIndices(vector<vec3> &vertices, vector<vec2> &texCoords, vector<unsigned int> &indices, vector<unsigned int> &tcIndices);
 	void generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices, vector<vec2> &texCoords,vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents);
+	vector<unsigned int> getAllIndices(vector<vec3> &vertices, vec3 vertex);
+	void normalizeArray(vector<vec3> &vectors);
 	//static void readVector(istringstream &content, vec3 &v);
 	//static void readVector(istringstream &content, vec2 &v);
 	

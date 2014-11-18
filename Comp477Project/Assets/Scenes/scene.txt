@@ -24,6 +24,6 @@ model=box.txt
 scale=100 1 100
 [light]
 name=Light0
-position=30 30 0
+position=0 40 0
 color=1 0.8 0.5
 brightness=1

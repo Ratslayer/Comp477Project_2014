@@ -251,14 +251,15 @@ void Mesh::unifyIndices(vector<vec3> &vertices, vector<vec2> &texCoords, vector<
 void Mesh::generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices, vector<vec2> &texCoords, vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents)
 {
 	normals = tangents = bitangents = vector<vec3>(vertices.size(), vec3(0, 0, 0));
+	//vector<float> numInfluences = vector<float>(indices.size(), 0.0f);
 	for (unsigned int i = 0; i < indices.size()-2; i += 3)
 	{
-		unsigned int id_0 = indices[i], id_1 = indices[i + 1], id_2 = indices[i + 2];
-		vec3 edge_1 = vertices[id_1] - vertices[id_0];
-		vec3 edge_2 = vertices[id_2] - vertices[id_0];
+		unsigned int id[3] = { indices[i], indices[i + 1], indices[1 + 2] };//id_0 = indices[i], id_1 = indices[i + 1], id_2 = indices[i + 2];
+		vec3 edge_1 = vertices[id[1]] - vertices[id[0]];
+		vec3 edge_2 = vertices[id[2]] - vertices[id[0]];
 
-		vec2 tedge_1 = texCoords[id_0] - texCoords[id_1];
-		vec2 tedge_2 = texCoords[id_0] - texCoords[id_2];
+		vec2 tedge_1 = texCoords[id[0]] - texCoords[id[1]];
+		vec2 tedge_2 = texCoords[id[0]] - texCoords[id[2]];
 
 		vec3 normal = edge_1.cross(edge_2);
 		vec3 tangent((tedge_2.y * edge_1.x - tedge_1.y * edge_2.x),
@@ -270,10 +271,40 @@ void Mesh::generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices
 		normal.normalize();
 		tangent.normalize();
 		bitangent.normalize();
+		for (unsigned int j = 0; j < 3; j++)
+		{
+			vector<unsigned int> vertexIndices = getAllIndices(vertices, vertices[id[j]]);
+			for (unsigned int k = 0; k < vertexIndices.size(); k++)
+			{
+				unsigned int vid = vertexIndices[k];
+				normals[vid] += normal;
+				tangents[vid] += tangent;
+				bitangents[vid] += bitangent;
+			}
+		}
+	}
+	normalizeArray(normals);
+	normalizeArray(tangents);
+	normalizeArray(bitangents);
+}
 
-		normals[id_0] = normal;
-		tangents[id_0] = tangent;
-		bitangents[id_0] = bitangent;
+vector<unsigned int> Mesh::getAllIndices(vector<vec3> &vertices, vec3 vertex)
+{
+	vector<unsigned int> indices;
+	for (unsigned int i = 0; i < vertices.size(); i++)
+	{
+		float diff = (vertices[i] - vertex).magnitude();
+		if (diff < 0.001f)
+			indices.push_back(i);
+	}
+	return indices;
+}
+
+void Mesh::normalizeArray(vector<vec3> &vectors)
+{
+	for (unsigned int i = 0; i < vectors.size(); i++)
+	{
+		vectors[i].normalize();
 	}
 }
 

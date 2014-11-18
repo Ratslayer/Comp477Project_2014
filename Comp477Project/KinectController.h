@@ -14,10 +14,17 @@ public:
 	void DrawJoints(Joint* pJoints, vector<vec3> jointPoints);
 	void DrawJoint(Joint* pJoints, vector<vec3> jointPoints, JointType joint1, JointType joint2);
 
+	vector<Joint> mainBodyJoints;
+	vector<quat> mainBodyOrientations;
+	vector<vec3> getJointVertices();
+
 private:
+	vector<Joint> getJoints(IBody* pBody);
+	vector<quat> getJointOrientations(IBody *pBody);
+	void addJointLine(vector<vec3> &vertices, vector<Joint> &joints, JointType joint1, JointType joint2);
+	
 	IKinectSensor *m_pKinectSensor;
 	ICoordinateMapper*      m_pCoordinateMapper;
 	IBodyFrameReader*       m_pBodyFrameReader;
-	//void SafeRelease(
 };
 
