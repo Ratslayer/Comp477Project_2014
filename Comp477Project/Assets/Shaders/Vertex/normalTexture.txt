@@ -1,20 +1,22 @@
-attribute vec3 position;
-attribute vec2 texCoord;
-attribute vec3 normal;
+#version 150
+in vec3 position;
+in vec2 texCoord;
+in vec3 normal;
 
 uniform mat4 mWorld;
 uniform mat4 mView;
 uniform mat4 mProjection;
 
-varying vec3 fNormal;
-varying vec3 fPosition;
+out vec3 fNormal;
+out vec3 fPosition;
+out vec2 UV;
 void main()
 {
 	//mat4 mModelView = mView * mWorld;
 	vec4 pos = mWorld * vec4(position, 1.0);
-	//mat3 mWorldInvTrans=mat3(mWorld);
-	fNormal = normal;//mWorldInvTrans * normal;
+	mat3 mWorldInvTrans=mat3(mWorld);
+	fNormal = mWorldInvTrans * normal;
 	fPosition = pos.xyz;
 	gl_Position = mProjection * mView * pos;
-	gl_TexCoord[0] = vec4(texCoord, 0, 1);
+	UV = texCoord;
 }

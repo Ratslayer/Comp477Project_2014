@@ -1,43 +1,8 @@
-﻿Build started 11/18/2014 1:43:57 PM.
+﻿Build started 11/19/2014 3:37:35 PM.
      1>Project "C:\Users\Ratslayer\Documents\GitHub\Comp477Project_2014\Comp477Project\Comp477Project.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\Comp477Project.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt stdafx.cpp
-         stdafx.cpp
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Comp477Project.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Actor.cpp Asset.cpp AssetManager.cpp BindingCollection.cpp Camera.cpp ColorDepthBuffer.cpp Comp477Project.cpp ConfigScanner.cpp Effect.cpp FileHelper.cpp FragmentShader.cpp FrameBuffer.cpp GameObject.cpp KinectController.cpp Light.cpp Mat44.cpp Material.cpp Mesh.cpp Model.cpp Renderer.cpp Scanner.cpp Scene.cpp Shader.cpp StringScanner.cpp Texture.cpp Vec2.cpp Vec4.cpp VertexShader.cpp Window.cpp
-         Window.cpp
-         VertexShader.cpp
-         Vec4.cpp
-         Vec2.cpp
-         Texture.cpp
-         StringScanner.cpp
-         Shader.cpp
-         Scene.cpp
-         Scanner.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yu"stdafx.h" /Fp"Debug\Comp477Project.pch" /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Renderer.cpp
          Renderer.cpp
-         Model.cpp
-         Mesh.cpp
-         Material.cpp
-         Mat44.cpp
-         Light.cpp
-         KinectController.cpp
-         GameObject.cpp
-         FrameBuffer.cpp
-     1>c:\users\ratslayer\documents\github\comp477project_2014\comp477project\framebuffer.cpp(38): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\ratslayer\documents\github\comp477project_2014\comp477project\framebuffer.cpp(69): warning C4018: '<' : signed/unsigned mismatch
-         FragmentShader.cpp
-         FileHelper.cpp
-         Generating Code...
-         Compiling...
-         Effect.cpp
-         ConfigScanner.cpp
-         Comp477Project.cpp
-         ColorDepthBuffer.cpp
-         Camera.cpp
-         BindingCollection.cpp
-         AssetManager.cpp
-         Asset.cpp
-         Actor.cpp
-         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Ratslayer\Documents\GitHub\Comp477Project_2014\Debug\Comp477Project.exe" /INCREMENTAL /NOLOGO Release/Win32/glew32.lib DevIL.lib ILU.lib ILUT.lib x86/Kinect20.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Ratslayer\Documents\GitHub\Comp477Project_2014\Debug\Comp477Project.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Ratslayer\Documents\GitHub\Comp477Project_2014\Debug\Comp477Project.lib" /MACHINE:X86 Debug\Actor.obj
          Debug\Asset.obj
@@ -74,4 +39,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:15.18
+Time Elapsed 00:00:02.93

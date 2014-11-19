@@ -6,10 +6,6 @@ using namespace MyNamespace;
 Renderer* Renderer::_renderer = NULL;
 Renderer::Renderer()
 {
-	//Shader::Desc shaderDesc;
-	//shaderDesc.vertexFileName = "vertex1";
-	//shaderDesc.fragmentFileName = "basic";
-	//pEffect = new Effect("vertex1.txt", "color.txt");
 	pEffect = new Effect("normalTexture.txt", "phongTexture.txt");
 	pPostProcessEffect = new Effect("directTexture.txt", "colorTexture.txt");
 	pScene = AssetManager::load<Scene>("scene.txt");
@@ -19,19 +15,7 @@ Renderer::Renderer()
 	desc.height = 768;
 	pBuffer = new ColorDepthBuffer(1024, 768);
 	pBuffer->unbind();
-	//texture = AssetManager::load<Texture>("checker.jpg");
-	//mesh = AssetManager::load<Mesh>("sphere_1.ASE");
-	/*pObject = new GameObject("ball.txt");
-	pObject->setPosition(vec3(10, 5, -3));
-	//model = AssetManager::load<Model>("ball.txt");
-	camera = new Camera();
-	camera->fovy = 90;
-	camera->setPosition(vec3(1, 3, 10));
-	camera->lookAt(vec3(0,0,0));
-	camera->setResolution(1024, 768);*/
 }
-
-
 Renderer::~Renderer()
 {
 	delete pEffect;

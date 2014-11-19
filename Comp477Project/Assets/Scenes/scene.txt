@@ -1,7 +1,7 @@
 #main camera
 [camera]
 name=MainCamera
-position=0 30 20
+position=0 50 1
 lookat=0 0 0
 fovy=90
 nearz=1
@@ -15,15 +15,16 @@ scale=3 3 3
 [gameobject]
 name=SkyBox
 position=0 0 0
-model=ball.txt
+model=skybox.txt
 scale=500 500 500
 [gameobject]
 name=Floor
+rotation=-0.707 0 0 0.707
 position=0 0 0
-model=box.txt
-scale=100 1 100
+model=floor.txt
+scale=100 100 100
 [light]
 name=Light0
-position=0 40 0
+position=0 20 0
 color=1 0.8 0.5
 brightness=1
