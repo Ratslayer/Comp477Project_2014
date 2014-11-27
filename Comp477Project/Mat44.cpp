@@ -134,17 +134,24 @@ Mat44 Mat44::getScale(vec3 &s)
 	return mat;
 }
 
-/*Mat44& Mat44::operator=(mat33 &m)
+void Mat44::operator*=(Mat44 &m)
 {
-	for (int i = 0; i < 3; i++)
-	{
-		vec3 row = m.getRow(i);
-		values[i * 4] = row.x;
-		values[i * 4 + 1] = row.y;
-		values[i * 4 + 2] = row.z;
-		values[i * 4 + 3] = 0;
-	}
-	values[12] = values[13] = values[14] = 0;
-	values[15] = 1;
-	return *this;
-}*/
+	*this = *this * m;
+}
+
+Mat44 Mat44::fromAxii(vec3 xAxis, vec3 yAxis, vec3 zAxis)
+{
+	mat44 m = mat44::getIdentity();
+	m.values[0] = xAxis.x;
+	m.values[1] = yAxis.x;
+	m.values[2] = zAxis.x;
+
+	m.values[4] = xAxis.y;
+	m.values[5] = yAxis.y;
+	m.values[6] = zAxis.y;
+
+	m.values[8] = xAxis.z;
+	m.values[9] = yAxis.z;
+	m.values[10] = zAxis.z;
+	return m;
+}

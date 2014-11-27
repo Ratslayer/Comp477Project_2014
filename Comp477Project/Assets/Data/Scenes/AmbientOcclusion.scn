@@ -1,0 +1,114 @@
+Scene
+{
+	///////////////
+	// Materials //
+	///////////////
+	BlinnPhongMaterial material
+	(
+		Color(0.8, 0.8, 0.8, 1.0),		// Surface
+		Color(0.8, 0.8, 0.8, 1.0),		// Ambient
+		Color(0.95, 0.95, 0.95, 1.0),	// Diffuse
+		Color(0.05, 0.05, 0.05, 1.0),	// Specular
+		Color(0.05, 0.05, 0.05, 1.0),	// Metallic
+		Color(0.0, 0.0, 0.0, 1.0),		// Reflection
+		Color(0.0, 0.0, 0.0, 1.0),		// Refraction
+		1.0,							// Refraction index
+		16.0,							// Shininess
+		false,							// Wireframe
+		NULL,							// 2D texture name
+		NULL							// Cubemap name for reflection/refraction)
+	);
+
+	///////////
+	// Nodes //
+	///////////
+	Node sceneGraphRoot
+	(
+		NULL,				// Parent (no parent)
+		Transformation()	// Transformation
+	);
+
+	Box box
+	(
+		sceneGraphRoot,					// Parent
+		Transformation(					// Transformation
+			Vector3(0., 0., 0.),			// Rotation X/Y/Z
+			Vector3(0., 0.5, 0.),			// Translation
+			Vector3(1., 1., 1.) ),			// Scaling						
+		material, 					// Material name
+		true,						// IsVisible?
+		1, 1, 1					// Size X/Y/Z
+	);
+
+	Plane plane
+	(
+		sceneGraphRoot,					// Parent
+		Transformation(					// Transformation
+			Vector3(0., 0., 0.),			// Rotation X/Y/Z
+			Vector3(0., 0., 0.),	// Translation
+			Vector3(1., 1., 1.) ),	// Scaling
+		material,						// Material name
+		true,							// IsVisible?
+		20, 20						// Size radius,nbsubdivisions_lat,nbsubdivisions_long
+	);
+
+	////////////
+	// Camera //
+	////////////
+	TurntableCamera turntableCamera
+	(
+		sceneGraphRoot,		// Parent
+		Transformation(),	// Transformation
+		0.7854,				// Field of view (45 degrees == PI/4)
+		0.1,				// Near clipping plane
+		200.0,				// Far clipping plane
+		3.0,				// Focal distance
+		0.0,				// Lens radius (no depth of field)
+		Vector3(0, 0, 0),	// Look-at center
+		Vector3(0, 1, 0),	// Theta Axis
+		Vector3(1, 0, 0),	// Phi Axis
+		-0.7854,			// Rotation Theta
+		0.0,				// Rotation Phi
+		3.0					// Distance
+	);
+
+	////////////
+	// Lights //
+	////////////
+	PointLight light1
+	(
+		sceneGraphRoot,				// Parent (no parent)
+		Transformation( Vector3(), Vector3(22, 9, -5), Vector3(1,1,1)),	// Transformation
+		Color(800, 800, 800, 1),	// Intensity
+		Color(0.1, 0.1, 0.1, 1) 	// Ambient
+	);
+
+	PointLight light2
+	(
+		sceneGraphRoot,				// Parent (no parent)
+		Transformation( Vector3(), Vector3(-22, 9, 5), Vector3(1,1,1)),	// Transformation
+		Color(1100, 1100, 1100, 1),	// Intensity
+		Color(0.1, 0.1, 0.1, 1) 	// Ambient
+	);
+
+	PointLight light3
+	(
+		sceneGraphRoot,				// Parent (no parent)
+		Transformation( Vector3(), Vector3(0, -24, 5), Vector3(1,1,1)),	// Transformation
+		Color(800, 800, 800, 1),	// Intensity
+		Color(0.1, 0.1, 0.1, 1) 	// Ambient
+	);
+
+	////////////////
+	// Scene info //
+	////////////////
+	SceneInfo
+	(
+		Color(1, 1, 1, 1.0),	// Background color
+		turntableCamera,		// Active camera name
+		sceneGraphRoot			// Scene graph root
+	);
+};
+
+
+

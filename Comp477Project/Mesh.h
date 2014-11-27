@@ -13,23 +13,32 @@ public:
 	void BindTexCoords(GLuint attribPos);
 	void BindNormals(GLuint attribPos);
 	void BindTangents(GLuint attribPos);*/
-	
+	vec3 minB, maxB, center;
+	float radius;
 	void draw(Effect* effect);
 	void loadFromFile(std::string fileName);
 	string getClassName(){ return "Mesh"; }
+	template <typename T>
+	static void createVBO(vector<T> &data, GLuint *iVBO)
+	{
+		glGenBuffers(1, iVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, *iVBO);
+		glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(T), data.data(), usageVBO);
+	}
+	static void deleteVBO(GLuint iVBO);
+	static void bindVBO(GLuint VBOpos, GLuint attribPos, int attribSize);
 protected:
-	GLenum usageVBO = GL_STATIC_DRAW;
+	static const GLenum usageVBO = GL_STATIC_DRAW;
 private:
 	vec2 getAverageTexCoord(unsigned int index, vector<pair<unsigned int, unsigned int>> &indexPairs, const vector<float> &rawTexCoords);
 	vector<float> getTexCoords(vector<pair<unsigned int, unsigned int>> &indexPairs, vector<float> &rawTexCoords, unsigned int numVertices);
 	//bind VBOpos to attribPos
 	//attribSize is the number of float components in every element of VBO
 	void createVBOs(vector<vec3> &vertices, vector<vec2> &texCoords, vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents, vector<unsigned int> &indices);
-	void bindVBO(GLuint VBOpos, GLuint attribPos, int attribSize);
-	void deleteVBO(GLuint iVBO);
 	void loadASEFile(string fileName);
-	//void loadObjFile(string fileName);
-	template <typename T>
+	void loadObjFile(string fileName);
+	void computeBounds(vector<vec3> &vertices);
+	/*template <typename T>
 	void readVector(istringstream &content, vector<T> &data, int numElements)
 	{
 		for (int i = 0; i < numElements; i++)
@@ -38,14 +47,8 @@ private:
 			content >> element;
 			data.push_back(element);
 		}
-	}
-	template <typename T>
-	void createVBO(vector<T> &data, GLuint *iVBO)
-	{
-		glGenBuffers(1, iVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, *iVBO);
-		glBufferData(GL_ARRAY_BUFFER, data.size()*sizeof(T), data.data(), usageVBO);
-	}
+	}*/
+	
 	void unifyIndices(vector<vec3> &vertices, vector<vec2> &texCoords, vector<unsigned int> &indices, vector<unsigned int> &tcIndices);
 	void generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices, vector<vec2> &texCoords,vector<vec3> &normals, vector<vec3> &tangents, vector<vec3> &bitangents);
 	vector<unsigned int> getAllIndices(vector<vec3> &vertices, vec3 vertex);

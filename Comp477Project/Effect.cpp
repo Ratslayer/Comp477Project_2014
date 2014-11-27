@@ -42,7 +42,7 @@ void Effect::loadAllParams()
 
 }
 
-Effect::Parameter& Effect::getParam(char* cname)
+Effect::Parameter& Effect::getParam(string cname)
 {
 	std::string paramName = cname;
 	Parameter* param = NULL;
@@ -135,8 +135,15 @@ void Effect::Parameter::initType()
 		}
 		break;
 	case 'm':
-		type = Parameter::PT_MAT44;
-		break;
+		switch (name[1])
+		{
+		case 'a':
+			type = Parameter::PT_MAT44_ARRAY;
+			break;
+		default:
+			type = Parameter::PT_MAT44;
+			break;
+		}
 	case 't':
 		switch (name[1])
 		{
@@ -190,6 +197,16 @@ void Effect::Parameter::operator=(Texture* tex)
 		glBindTexture(GL_TEXTURE_2D, tex->getTextureID());
 		//glBindSampler(0, linearFiltering);
 		//glProgramUniform1i(tex->getTextureID(), paramLoc, 0);
+	}
+}
+
+void Effect::Parameter::operator=(vector<mat44> &vm)
+{
+
+	if (assertType(PT_MAT44_ARRAY))
+	{
+		float* data = &vm[0].values[0];
+		glUniformMatrix4fv(paramLoc, vm.size(), GL_FALSE, const_cast<float*>(data));
 	}
 }
 

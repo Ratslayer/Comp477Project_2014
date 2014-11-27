@@ -35,7 +35,7 @@ void FrameBuffer::bind()
 
 void FrameBuffer::unbind()
 {
-	for (int i = 0; i < targets.size(); i++)
+	for (unsigned int i = 0; i < targets.size(); i++)
 	{
 		glBindTexture(GL_TEXTURE_2D, targets[i]->getTextureID());
 		glGenerateMipmap(GL_TEXTURE_2D);
@@ -66,7 +66,7 @@ Texture* FrameBuffer::getDepth()
 Texture* FrameBuffer::getColor(int attachId)
 {
 	Texture* target = NULL;
-	if (attachId >= 0 && attachId < targets.size())
+	if (attachId >= 0 && attachId < (int)targets.size())
 		target = targets[attachId];
 	return target;
 }

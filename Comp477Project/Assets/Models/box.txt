@@ -1,2 +1,2 @@
 mesh=box.ASE
-material=gay.txt
+material=checker.txt

@@ -119,6 +119,7 @@ void KinectController::ProcessBody(INT64 nTime, int nBodyCount, IBody** ppBodies
 			{
 				mainBodyJoints = getJoints(pBody);
 				mainBodyOrientations = getJointOrientations(pBody);
+				mainBodyJointPositions = getJointPositions(pBody);
 				/*Joint pJoints[JointType_Count];
 				vector<vec3> jointPoints;
 				vector<Joint> joints;
@@ -279,6 +280,22 @@ vector<quat> KinectController::getJointOrientations(IBody *mainBody)
 		}
 	}
 	return quats;
+}
+
+vector<vec3> KinectController::getJointPositions(IBody *pBody)
+{
+	vector<vec3> positions;
+	Joint joints[JointType_Count];
+	HRESULT hr = pBody->GetJoints(_countof(joints), joints);
+	if (SUCCEEDED(hr))
+	{
+		for (unsigned int i = 0; i < _countof(joints); i++)
+		{
+			CameraSpacePoint pos = joints[i].Position;
+			positions.push_back(vec3(pos.X, pos.Y, pos.Z));
+		}
+	}
+	return positions;
 }
 
 /*IBody* KinectController::getFirstBody(IBody** ppBodies, int numBodies)

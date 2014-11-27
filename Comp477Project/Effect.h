@@ -18,12 +18,14 @@ public:
 			PT_FLOAT3,
 			PT_FLOAT4,
 			PT_MAT44,
+			PT_MAT44_ARRAY,
 			PT_TEX2D,
 			PT_TEXCUBE
 		};
 		Parameter(std::string &paramName, GLint program);
 
 		void operator =(mat44 &m);
+		void operator =(vector<mat44> &vm);
 		void operator =(vec4 &v);
 		void operator =(vec3 &v);
 		void operator =(vec2 &v);
@@ -44,7 +46,7 @@ public:
 	Effect(char* vertexName, char* fragmentName);
 	~Effect();
 	void Bind();
-	Parameter& getParam(char* cname);
+	Parameter& getParam(string cname);
 	bool hasParam(char* cname);
 	template<typename T>
 	void safeSetParam(char* cname, T &value)

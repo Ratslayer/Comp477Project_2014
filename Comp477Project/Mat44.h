@@ -10,8 +10,10 @@ public:
 	Vec4 getRow(int i);
 	Vec4 getCol(int i);
 	Mat44 operator *(Mat44 &m);
+	void operator *=(Mat44 &m);
 	//Mat44& operator =(mat33 &m);
 	//static methods
+	static Mat44 fromAxii(vec3 xAxis, vec3 yAxis, vec3 zAxis);
 	static Mat44 getPerspective(real aspectRatio, real fovyDegrees, real nearZ, real farZ);
 	static Mat44 getTranslation(vec3 &v);
 	static Mat44 getView(vec3 &eye, vec3 &at, vec3 &up);

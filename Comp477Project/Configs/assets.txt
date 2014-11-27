@@ -7,3 +7,4 @@ Texture=Textures
 Model=Models
 Material=Materials
 Scene=Scenes
+SkinnedModel=Models\Skinned

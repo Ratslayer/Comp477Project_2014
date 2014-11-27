@@ -8,14 +8,16 @@
 #include "Scene.h"
 #include "FrameBuffer.h"
 #include "KinectController.h"
+#include "SkinnedModel.h"
 namespace MyNamespace
 {
 	class Renderer
 	{
 	private:
 		static Renderer* _renderer;
-		Scene *pScene;
-		Effect *pEffect, *pPostProcessEffect;
+		
+		SkinnedModel *pHero;
+		Effect *pEffect, *pPostProcessEffect, *pSkinEffect;
 		FrameBuffer *pBuffer;
 		KinectController *pKinect;
 		//GameObject *pObject;
@@ -30,7 +32,7 @@ namespace MyNamespace
 	public:
 		Renderer();
 		~Renderer();
-
+		Scene *pScene;
 		static Renderer* getRenderer();
 		static void init();
 		static void release();

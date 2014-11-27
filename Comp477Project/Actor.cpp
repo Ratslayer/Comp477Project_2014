@@ -101,10 +101,10 @@ vec3 Actor::getRotatedVec3(vec3 &v)
 
 void Actor::loadFromDesc(ActorDesc &desc)
 {
-	name = desc.name; 
-	position = desc.position;
-	velocity = desc.velocity;
-	rotation = desc.rotation;
+	name		= desc.name;
+	position	= desc.position;
+	velocity	= desc.velocity;
+	rotation	= desc.rotation;
 }
 ActorDesc::ActorDesc()
 {

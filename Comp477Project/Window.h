@@ -19,8 +19,10 @@ namespace MyNamespace
 		char* title;
 		//methods
 		void init(int*, char**);
+		void initPhysX();
 		static void printGlError(GLenum error);
 		static void printGlError();
 	};
 }
+
 

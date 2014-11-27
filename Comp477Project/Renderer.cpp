@@ -7,9 +7,11 @@ Renderer* Renderer::_renderer = NULL;
 Renderer::Renderer()
 {
 	pEffect = new Effect("normalTexture.txt", "phongTexture.txt");
+	pSkinEffect = new Effect("skinned.txt", "color.txt");
 	pPostProcessEffect = new Effect("directTexture.txt", "colorTexture.txt");
-	pScene = AssetManager::load<Scene>("scene.txt");
+	//pHero = AssetManager::load<SkinnedModel>("hero.txt");
 	pKinect = new KinectController();
+	pScene = AssetManager::load<Scene>("scene.txt");
 	FBODesc desc;
 	desc.width = 1024;
 	desc.height = 768;
@@ -21,13 +23,34 @@ Renderer::~Renderer()
 	delete pEffect;
 	delete pBuffer;
 	delete pPostProcessEffect;
+	delete pSkinEffect;
 	delete pKinect;
+	delete pHero;
 	//delete pScene;
 	//delete camera;
 }
 void Renderer::draw()
 {
+	g_physXScene->simulate(g_timeStep);
+	g_physXScene->fetchResults(NxSimulationStatus::NX_ALL_FINISHED);
+	pBuffer->bind();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	drawScene(pScene, pEffect, pBuffer);
+
+	/*pSkinEffect->Bind();
+	quat rot;
+	rot.setXYZW(1, 0, 0, 0); //mat44::getScale(30) * mat44(mat33(rot))*mat44::getTranslation(vec3(20, 10 ,15));
+	pHero->loadRotations(pKinect->mainBodyOrientations);
+	pHero->loadKinectPositions(pKinect->mainBodyJointPositions);
+	vec3 pos = pHero->getPelvisPos();// +vec3(10, 0);
+	pSkinEffect->getParam("mWorld") = mat44(mat33(rot))* mat44::getTranslation(pos);
+	pScene->pCamera->setPosition(pos + vec3(0, 1, 2));
+	pScene->pCamera->lookAt(pos);
+	pScene->pCamera->bind(pSkinEffect);
+	pKinect->Update();
+	pHero->draw(pSkinEffect);*/
+
+	pBuffer->unbind();
 	bindBackBuffer();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	pPostProcessEffect->Bind();

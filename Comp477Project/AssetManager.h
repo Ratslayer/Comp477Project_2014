@@ -29,18 +29,20 @@ public:
 		}
 		return asset;
 	}
+	template<typename T>
+	static string getClassPath(T &obj)
+	{
+		string path;
+		path = _manager->pathNames.get(obj.getClassName());
+		return _manager->getAssetsPath() + "\\" + path;
+	}
 private:
 	static AssetManager* _manager;
 	BindingCollection pathNames;
 	vector<Asset*> assets;
 	string getAssetsPath();
-	template<typename T>
-	string getClassPath(T &obj)
-	{
-		string path;
-		path=pathNames.get(obj.getClassName());
-		return getAssetsPath() + "\\" + path;
-	}
+	
+	
 	Asset* getAssetByName(string &name);
 	string getFullPath(string path);
 };

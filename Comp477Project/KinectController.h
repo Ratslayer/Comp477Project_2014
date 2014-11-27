@@ -16,11 +16,13 @@ public:
 
 	vector<Joint> mainBodyJoints;
 	vector<quat> mainBodyOrientations;
+	vector<vec3> mainBodyJointPositions;
 	vector<vec3> getJointVertices();
 
 private:
 	vector<Joint> getJoints(IBody* pBody);
 	vector<quat> getJointOrientations(IBody *pBody);
+	vector<vec3> getJointPositions(IBody *pBody);
 	void addJointLine(vector<vec3> &vertices, vector<Joint> &joints, JointType joint1, JointType joint2);
 	
 	IKinectSensor *m_pKinectSensor;

@@ -12,4 +12,5 @@ public:
 	quat toQuat();
 };
 typedef Vec4 vec4;
+vec3 operator *(vec3 &v1, vec3 &v2);
 

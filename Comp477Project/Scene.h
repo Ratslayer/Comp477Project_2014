@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Light.h"
 #include "GameObject.h"
+#include "PhysicsObject.h"
 #include "Effect.h"
 class Scene
 	: public Asset
@@ -18,7 +19,6 @@ public:
 
 	Camera* pCamera;
 	vector<Actor*> actors;
-
 	Camera* getCamera(string name);
 	vector<GameObject*> getAllObjects();
 	template<typename T> 

@@ -12,8 +12,8 @@ public:
 	~Model();
 	Mesh *pMesh;
 	Material *pMaterial;
-	void loadFromFile(string fileName);
+	virtual void loadFromFile(string fileName);
 	string getClassName(){ return "Model"; }
-	void draw(Effect* effect);
+	virtual void draw(Effect* effect);
 };
 

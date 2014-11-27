@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Mesh.h"
 #include "Window.h"
+#include "StringScanner.h"
 Mesh::Mesh()
 	:Asset()
 {
@@ -18,9 +19,13 @@ Mesh::~Mesh()
 void Mesh::loadFromFile(std::string fileName)
 {
 	Asset::loadFromFile(fileName);
-	loadASEFile(fileName);
+	string extension = fileName.substr(fileName.size() - 3, 3);
+	if (Scanner::lcEquals(extension, "ase"))
+		loadASEFile(fileName);
+	else if (Scanner::lcEquals(extension, "obj"))
+		loadObjFile(fileName);
 }
-/*void Mesh::loadObjFile(string fileName)
+void Mesh::loadObjFile(string fileName)
 {
 	ifstream fileStream(fileName);
 	if (fileStream.is_open())
@@ -38,24 +43,28 @@ void Mesh::loadFromFile(std::string fileName)
 			string header;
 			istringstream content(nextLine);
 			content >> header;
+			getline(content, nextLine);
+			StringScanner strSc(nextLine);
 			if (header == "v")
 			{
-				readVector<float>(content, vertices, 3);
+				vec3 v = strSc.getVec3();
+				vertices.push_back(v);
 			}
 			else if (header == "vt")
 			{
-				readVector<float>(content, rawTexCoords, 2);
+				texCoords.push_back(strSc.getVec2());//readVector<float>(content, rawTexCoords, 2);
 			}
 			else if (header == "vn")
 			{
-				readVector<float>(content, normals, 3);
+				normals.push_back(strSc.getVec3());
 			}
 			else if (header == "f")
 			{
 				string indexBatch;
 				for (int i = 0; i < 3; i++)
 				{
-					content >> indexBatch;
+					indices.push_back(strSc.getPrimitive<unsigned int>()-1);
+					/*content >> indexBatch;
 					istringstream indexStream(indexBatch);
 					string firstIndexString, secondIndexString;
 					getline(indexStream, firstIndexString, '/');
@@ -64,7 +73,7 @@ void Mesh::loadFromFile(std::string fileName)
 					indexPair.first = atoi(firstIndexString.c_str());
 					indexPair.second = atoi(secondIndexString.c_str());
 					indexPairs.push_back(indexPair);
-					indices.push_back(indexPair.first-1);
+					indices.push_back(indexPair.first-1);*/
 				}
 				//readVector<unsigned int>(content, indices, 3);
 				/*for (int i = 0; i < 3; i++)
@@ -73,21 +82,24 @@ void Mesh::loadFromFile(std::string fileName)
 					content >> index;
 					indices.push_back(index);
 				}*/
-		//	}
-		//}
+			}
+		}
 		/*for (int i = 0; i < rawTexCoords.size() / 2; i++)
 		{
 			rawTexCoords[i + 1] = 1 - rawTexCoords[i + 1];
 		}*/
 		//texCoords = rawTexCoords;//getTexCoords(indexPairs, rawTexCoords, vertices.size()/3);
-		/*createVBOs(vertices, texCoords, normals, indices);
-		createVBO<vec3>(binormals, &iBinormalsVBO);
+		//createVBOs(vertices, texCoords, normals, vector<vec3>(), vector<vec3>(), indices);
+		computeBounds(vertices);
+		createVBO<vec3>(vertices, &iVerticesVBO);
+		createVBO<unsigned int>(indices, &iIndicesVBO);
+		numIndices = indices.size();
 	}
 
-}*/
+}
 void Mesh::bindVBO(GLuint VBOpos, GLuint attribPos, int attribSize)
 {
-	if (attribPos != -1)
+	if (attribPos != -1 && VBOpos != 0)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, VBOpos);
 		glEnableVertexAttribArray(attribPos);
@@ -162,15 +174,15 @@ void Mesh::loadASEFile(string fileName)
 	//get size of model
 	unsigned int numVertices, numFaces;
 	sc.jumpAfter("MESH_NUMVERTEX");
-	numVertices = sc.getUInt();
+	numVertices = sc.getPrimitive<unsigned int>();
 	sc.jumpAfter("MESH_NUMFACES");
-	numFaces = sc.getUInt();
+	numFaces = sc.getPrimitive<unsigned int>();
 	//get vertices
 	sc.jumpAfter("MESH_VERTEX_LIST");
 	for (unsigned int i = 0; i < numVertices; i++)
 	{
 		sc.jumpAfter("MESH_VERTEX");
-		unsigned int id=sc.getUInt();
+		unsigned int id=sc.getPrimitive<unsigned int>();
 		vec3 vertex = sc.getVec3() - translation;
 		vertices.push_back(vertex);
 		//for (int j = 0; j < 3; j++)
@@ -185,32 +197,33 @@ void Mesh::loadASEFile(string fileName)
 		for (int j = 0; j < 3; j++)
 		{
 			sc.jumpAfter(":");
-			indices.push_back(sc.getUInt());
+			indices.push_back(sc.getPrimitive<unsigned int>());
 		}
 	}
 	//get texture coordinates
 	sc.jumpAfter("MESH_NUMTVERTEX");
-	unsigned int numTexCoords = sc.getUInt();
+	unsigned int numTexCoords = sc.getPrimitive<unsigned int>();
 	sc.jumpAfter("MESH_TVERTLIST");
 	for (unsigned int i = 0; i < numTexCoords; i++)
 	{
 		sc.jumpAfter("MESH_TVERT");
-		sc.getUInt();
+		sc.getPrimitive<unsigned int>();
 		vec2 tc = sc.getVec2();
 		texCoords.push_back(tc);
 		//texCoords.push_back(sc.getFloat());
 		//texCoords.push_back(sc.getFloat());
 	}
 	sc.jumpAfter("MESH_NUMTVFACES");
-	unsigned int numTcIndices = sc.getUInt();
+	unsigned int numTcIndices = sc.getPrimitive<unsigned int>();
 	sc.jumpAfter("MESH_TFACELIST");
 	for (unsigned int i = 0; i < numTcIndices; i++)
 	{
 		sc.jumpAfter("MESH_TFACE");
-		sc.getUInt();
+		sc.getPrimitive<unsigned int>();
 		for (int j = 0; j < 3; j++)
-			tcIndices.push_back(sc.getUInt());
+			tcIndices.push_back(sc.getPrimitive<unsigned int>());
 	}
+	computeBounds(vertices);
 	unifyIndices(vertices, texCoords, indices, tcIndices);
 	generateNormals(vertices, indices, texCoords, normals, tangents, bitangents);
 	createVBOs(vertices, texCoords, normals, tangents, bitangents, indices);
@@ -305,6 +318,24 @@ void Mesh::normalizeArray(vector<vec3> &vectors)
 	for (unsigned int i = 0; i < vectors.size(); i++)
 	{
 		vectors[i].normalize();
+	}
+}
+
+void Mesh::computeBounds(vector<vec3> &vertices)
+{
+	minB = maxB = center = vec3(0, 0, 0);
+	radius = 0;
+	for (unsigned int i = 0; i < vertices.size(); i++)
+	{
+		center += vertices[i];
+	}
+	center /= (NxReal)vertices.size();
+	for (unsigned int i = 0; i < vertices.size(); i++)
+	{
+		vec3 diff = vertices[i] - center;
+		radius = fmax(radius, diff.magnitude());
+		minB.min(diff);
+		maxB.max(diff);
 	}
 }
 

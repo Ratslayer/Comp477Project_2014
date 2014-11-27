@@ -1,38 +1,96 @@
-attribute vec3 position;
-attribute vec2 texCoord;
-attribute vec3 normal;
+#version 150
+in vec3 position;
+in vec2 texCoord;
+in vec3 normal;
+in vec3 weights_1;
+in vec3 weights_2;
+in vec3 weights_3;
+in vec3 weights_4;
+in vec3 weights_5;
+in vec3 weights_6;
+
+//in float weights_1[16];
+//in float weights_2;
 
 uniform mat4 mWorld;
 uniform mat4 mView;
 uniform mat4 mProjection;
+uniform mat4 maBoneTransforms[17];
 
-uniform mat4 mWeights1;
-uniform mat4 mWeights2;
-uniform mat4 maBoneTransforms[18];
-varying vec3 fNormal;
-varying vec3 fPosition;
-float getWeight(int id)
+out vec3 fNormal;
+out vec3 fPosition;
+out vec2 UV;
+out vec3 boneColor;
+
+uniform vec3 boneColors[16] =
 {
-	int i=id % 16;
-	int j=i / 4;
-	int k=i % 4;
-	float result;
-	if(id<16)
-		result=mWeights1[j][k];
-	else result=mWeights2[j][k];
-	return result;
+	vec3(1,0,0),
+	vec3(1,0,0),
+	vec3(1,1,1),
+
+	vec3(0,1,0),
+	vec3(0, 0.7, 0.3),
+	vec3(0,	0.7, 0.9),
+	vec3(0,1,1),
+	
+	vec3(0,0,1),
+	vec3(0,0.3, 0.7),
+	vec3(0,0.9, 0.7),
+	vec3(0,1,1),
+
+	vec3(0.7, 0.3, 0),
+	vec3(0.7, 0.9, 0),
+	vec3(1,1,0),
+
+	vec3(0.7, 0, 0.3),
+	vec3(0.7, 0, 0.9),
+};
+uniform vec3 color17 = vec3(1,0,1);
+float getWeight(int i)
+{
+	float weight=0;
+	if(i<3)
+	{
+		weight=weights_1[i];
+	}
+	else if(i<6)
+	{
+		weight=weights_2[i-3];
+	}
+	else if(i<9)
+	{
+		weight=weights_3[i-6];
+	}
+	else if(i<12)
+	{
+		weight=weights_4[i-9];
+	}
+	else if(i<15)
+	{
+		weight=weights_5[i-12];
+	} 
+	else if(i<18)
+	{
+		weight=weights_6[i-15];
+	}
+	return weight; 		
 }
 void main()
 {
 	mat4 skinWorld=mat4(0);
-	for(int i=0;i<18;i++)
+	vec3 bColor=vec3(0);
+	for(int i=0;i<17;i++)
 	  skinWorld+=maBoneTransforms[i]*getWeight(i);
-	skinWorld/=18.0f;
+	for(int i=0;i<16;i++)
+	  bColor+=boneColors[i]*getWeight(i);
+	bColor+=color17*getWeight(16);
+	boneColor=bColor;
+	//skinWorld/=17.0f;
 	//mat4 mModelView = mView * mWorld;
 	vec4 pos = mWorld * skinWorld * vec4(position, 1.0);
 	//mat3 mWorldInvTrans=mat3(mWorld);
 	fNormal = normal;//mWorldInvTrans * normal;
 	fPosition = pos.xyz;
 	gl_Position = mProjection * mView * pos;
-	gl_TexCoord[0] = vec4(texCoord, 0, 1);
+	UV=texCoord;
 }

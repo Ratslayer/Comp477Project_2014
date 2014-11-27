@@ -55,7 +55,7 @@ void Scanner::jumpAfter(string str)
 	}
 }
 
-float Scanner::getFloat()
+/*float Scanner::getFloat()
 {
 	float f;
 	dataStream >> f;
@@ -67,7 +67,7 @@ unsigned int Scanner::getUInt()
 	unsigned int ui;
 	dataStream >> ui;
 	return ui;
-}
+}*/
 
 pair<string, string> Scanner::splitString(string str, char delim)
 {
@@ -107,16 +107,26 @@ bool Scanner::lcEquals(string str1, string str2)
 vec3 Scanner::getVec3()
 {
 	vec3 v;
-	v.x = getFloat();
-	v.y = getFloat();
-	v.z = getFloat();
+	v.x = getPrimitive<float>();
+	v.y = getPrimitive<float>();
+	v.z = getPrimitive<float>();
 	return v;
 }
 
 vec2 Scanner::getVec2()
 {
 	vec2 v;
-	v.x = getFloat();
-	v.y = getFloat();
+	v.x = getPrimitive<float>();
+	v.y = getPrimitive<float>();
 	return v;
+}
+
+bool Scanner::hasData()
+{
+	return dataStream.rdbuf()->in_avail() > 0;
+}
+
+void Scanner::skipLine()
+{
+	jumpAfter("\n");
 }

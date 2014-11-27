@@ -1,28 +1,51 @@
 #main camera
 [camera]
 name=MainCamera
-position=0 50 1
+position=0 3 10
 lookat=0 0 0
 fovy=90
 nearz=1
 farz=1000
-#basic sphere
-[gameobject]
-name=Sphere
-position=0 10 0
-model=ball.txt
-scale=3 3 3
 [gameobject]
 name=SkyBox
 position=0 0 0
 model=skybox.txt
 scale=500 500 500
-[gameobject]
+[PhysicsObject]
+name=Ball0
+model=ball.txt
+rotation=0 0 0 1
+position=0 6 0
+scale=1 1 1
+shape=sphere
+[PhysicsObject]
+name=Ball1
+model=ball.txt
+rotation=0 0 0 1
+position=0.5 4 0
+scale=1 1 1
+shape=sphere
+[PhysicsObject]
+name=Box0
+model=box.txt
+rotation=0 0 0 1
+position=0.5 2 0
+scale=1 1 1
+shape=box
+[PhysicsObject]
+name=Box1
+model=box.txt
+rotation=0 0 0 1
+position=0 3 0
+scale=2 0.5 1
+shape=box
+[PhysicsObject]
 name=Floor
-rotation=-0.707 0 0 0.707
+rotation=0.707 0 0 -0.707
 position=0 0 0
 model=floor.txt
 scale=100 100 100
+shape=plane
 [light]
 name=Light0
 position=0 20 0

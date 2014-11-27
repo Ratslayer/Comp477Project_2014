@@ -33,3 +33,12 @@ quat Vec4::toQuat()
 	result.z = z;
 	return result;
 }
+
+vec3 operator*(vec3 &v1, vec3 &v2)
+{
+	vec3 v;
+	v.x = v1.x*v2.x;
+	v.y = v1.y*v2.y;
+	v.z = v1.z*v2.z;
+	return v;
+}

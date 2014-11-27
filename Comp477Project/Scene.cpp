@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Scene.h"
+#include "Window.h"
 
 
 Scene::Scene()
@@ -36,6 +37,10 @@ void Scene::loadActor(string className, string content)
 	if (lcName == "gameobject")
 	{
 		load<GameObject, GameObjectDesc>(content);
+	}
+	if (lcName == "physicsobject")
+	{
+		load<PhysicsObject, PhysicsDesc>(content);
 	}
 	if (lcName == "camera")
 	{
