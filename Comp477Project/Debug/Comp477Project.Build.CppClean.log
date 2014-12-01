@@ -2,7 +2,6 @@ c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\com
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\vc120.pdb
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\vc120.idb
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\stdafx.obj
-c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\fragmentshader.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\framebuffer.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\gameobject.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\kinectcontroller.obj
@@ -11,11 +10,11 @@ c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\mat
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\material.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\mesh.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\model.obj
+c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\physicsobject.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\renderer.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\scanner.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\scene.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\shader.obj
-c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\skinnedmodel.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\stringscanner.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\texture.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\vec2.obj
@@ -32,6 +31,8 @@ c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\com
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\configscanner.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\effect.obj
 c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\filehelper.obj
+c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\fragmentshader.obj
+c:\users\ratslayer\documents\github\comp477project_2014\comp477project\debug\skinnedmodel.obj
 c:\users\ratslayer\documents\github\comp477project_2014\debug\comp477project.ilk
 c:\users\ratslayer\documents\github\comp477project_2014\debug\comp477project.exe
 c:\users\ratslayer\documents\github\comp477project_2014\debug\comp477project.pdb

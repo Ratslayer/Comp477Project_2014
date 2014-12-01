@@ -105,6 +105,7 @@ void Actor::loadFromDesc(ActorDesc &desc)
 	position	= desc.position;
 	velocity	= desc.velocity;
 	rotation	= desc.rotation;
+	bVisible = true;//desc.bVisible;
 }
 ActorDesc::ActorDesc()
 {
@@ -116,5 +117,7 @@ ActorDesc::ActorDesc(string data)
 	position = bindings.getVec3("Position");
 	velocity = bindings.getVec3("Velocity");
 	rotation = bindings.getQuat("Rotation");
+	//bVisible = bindings.getPrimitive<bool>("Visible");
+	bVisible = true;
 	name = bindings.get("name");
 }

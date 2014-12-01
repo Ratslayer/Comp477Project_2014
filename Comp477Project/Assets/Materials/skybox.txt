@@ -1,1 +1,1 @@
-TextureMap=EarthExplosion.jpg
+TextureMap=Star.png

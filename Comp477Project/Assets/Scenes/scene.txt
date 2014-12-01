@@ -1,53 +1,55 @@
 #main camera
 [camera]
 name=MainCamera
-position=0 3 10
+position=0 20 10
 lookat=0 0 0
 fovy=90
-nearz=1
+nearz=0.2
 farz=1000
 [gameobject]
 name=SkyBox
 position=0 0 0
 model=skybox.txt
 scale=500 500 500
+visible=true
 [PhysicsObject]
-name=Ball0
+name=lefthand
+position=0 10 0
 model=ball.txt
-rotation=0 0 0 1
-position=0 6 0
-scale=1 1 1
+scale=0.1 0.1 0.1
 shape=sphere
+visible=true
 [PhysicsObject]
-name=Ball1
+name=righthand
+position=0 10 0
 model=ball.txt
-rotation=0 0 0 1
-position=0.5 4 0
-scale=1 1 1
+scale=0.1 0.1 0.1
 shape=sphere
+visible=true
 [PhysicsObject]
-name=Box0
-model=box.txt
-rotation=0 0 0 1
-position=0.5 2 0
-scale=1 1 1
-shape=box
+name=rightfoot
+position=0 10 0
+model=ball.txt
+scale=0.1 0.1 0.1
+shape=sphere
+visible=true
 [PhysicsObject]
-name=Box1
-model=box.txt
-rotation=0 0 0 1
-position=0 3 0
-scale=2 0.5 1
-shape=box
+name=leftfoot
+position=0 10 0
+model=ball.txt
+scale=0.1 0.1 0.1
+shape=sphere
+visible=true
 [PhysicsObject]
 name=Floor
-rotation=0.707 0 0 -0.707
+rotation=0.707 0 0 0.707
 position=0 0 0
 model=floor.txt
 scale=100 100 100
 shape=plane
+visible=true
 [light]
 name=Light0
 position=0 20 0
-color=1 0.8 0.5
+color=1 1 1
 brightness=1

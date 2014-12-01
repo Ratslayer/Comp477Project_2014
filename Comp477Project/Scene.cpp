@@ -60,10 +60,21 @@ void Scene::draw(Effect *effect)
 	vector<GameObject*> objects = getAllObjects();
 	for (unsigned int i = 0; i < objects.size(); i++)
 	{
-		objects[i]->draw(effect);
+		if (objects[i]->bVisible)
+			objects[i]->draw(effect);
 	}
 }
-
+void Scene::multiplyObjects(PhysicsDesc &desc, vector<vec3> positions)
+{
+	PhysicsObject *obj;
+	for (unsigned int i = 0; i < positions.size(); i++)
+	{
+		desc.position = positions[i];
+		obj = new PhysicsObject();
+		obj->loadFromDesc(desc);
+		actors.push_back(obj);
+	}
+}
 Camera* Scene::getCamera(string name)
 {
 	Camera* pNewCamera = NULL;

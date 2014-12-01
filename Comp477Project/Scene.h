@@ -36,7 +36,7 @@ public:
 		return actor;
 	}
 	void loadActor(string className, string content);
-
+	void multiplyObjects(PhysicsDesc &desc, vector<vec3> positions);
 	template<typename classType, typename descType>
 	void load(string &data)
 	{

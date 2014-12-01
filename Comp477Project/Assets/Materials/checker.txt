@@ -1,2 +1,2 @@
 #basic checker material
-TextureMap=checker.jpg
+TextureMap=lucky.png

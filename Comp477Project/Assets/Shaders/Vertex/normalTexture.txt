@@ -14,8 +14,9 @@ void main()
 {
 	//mat4 mModelView = mView * mWorld;
 	vec4 pos = mWorld * vec4(position, 1.0);
-	mat3 mWorldInvTrans=mat3(mWorld);
-	fNormal = mWorldInvTrans * normal;
+	mat4 mWorldInvTrans=transpose(inverse(mWorld));
+	vec4 norm = mWorldInvTrans * vec4(normal, 0.0);
+	fNormal = norm.xyz;
 	fPosition = pos.xyz;
 	gl_Position = mProjection * mView * pos;
 	UV = texCoord;

@@ -43,10 +43,11 @@ void SkinnedModel::loadJoints(string fileName)
 		sc.getPrimitive<unsigned int>();
 		//sc.skipLine();
 	}
-	for (unsigned int i = 0; i < joints.size(); i++)
+	/*for (unsigned int i = 0; i < joints.size(); i++)
 	{
 		joints[i].rotation.id();
-	}
+	}*/
+	//extendJoint(14, 1.3f);
 }
 
 void SkinnedModel::loadWeights(string fileName)
@@ -83,7 +84,6 @@ void SkinnedModel::draw(Effect* effect)
 	//joints[2].rotation.setWXYZ(0.5, 0, 0, 0.3);
 	//joints[2].rotation.normalize();
 	//joints[7].rotation.setWXYZ(0.7, 0.8, 0.3, 0.2);
-	//updateTransforms();
 	Mesh::bindVBO(iWeights1VBO, effect->getAttribute("weights_1"), 3);
 	Mesh::bindVBO(iWeights2VBO, effect->getAttribute("weights_2"), 3);
 	Mesh::bindVBO(iWeights3VBO, effect->getAttribute("weights_3"), 3);
@@ -140,13 +140,15 @@ void SkinnedModel::updateTransforms()
 			//vector<MyJoint*> children = getChildren(i);
 			//for (unsigned int j = 0; j < children.size(); j++)
 			//{
-			quat invParentRot = parent->rotation;
-			invParentRot.conjugate();
-			mat44 childRot = mat33(joint->rotation);// *mat33(invParentRot);
+			//quat invParentRot = parent->rotation;
+			//invParentRot.conjugate();
+			//mat44 childRot = mat33(joint->rotation);// *mat33(invParentRot);
 			//###############FROM JOINT POSITIONS###################
 			vec3 kinectDir = joint->kinectPos - parent->kinectPos;
-			vec3 restDir = joint->pos - parent->pos;
-			childRot = mat33(getRotation(restDir, kinectDir));
+			vec3 restDir = (parentRot * vec4(joint->pos, 1) 
+				- parentRot * vec4(parent->pos, 1))
+				.toVec3();
+			mat44 childRot = mat33(getRotation(restDir, kinectDir));
 
 			//###############END####################################
 			//correctRotation(childRot, i);
@@ -159,7 +161,38 @@ void SkinnedModel::updateTransforms()
 		}
 	}
 }
-
+vector<vec3> SkinnedModel::convertVectors(vector<vec3> &a)
+{
+	vector<vec3> newA;
+	if (a.size() > 0)
+	{
+		newA.push_back(a[JointType_SpineShoulder]);
+		newA.push_back(a[JointType_SpineMid]);
+		newA.push_back(a[JointType_SpineBase]);
+		newA.push_back(a[JointType_Neck]);
+		//id: 4
+		newA.push_back(a[JointType_HipLeft]);
+		newA.push_back(a[JointType_KneeLeft]);
+		newA.push_back(a[JointType_AnkleLeft]);
+		newA.push_back(a[JointType_FootLeft]);
+		//id: 8
+		newA.push_back(a[JointType_HipRight]);
+		newA.push_back(a[JointType_KneeRight]);
+		newA.push_back(a[JointType_AnkleRight]);
+		newA.push_back(a[JointType_FootRight]);
+		//id: 12
+		newA.push_back(a[JointType_ShoulderLeft]);
+		newA.push_back(a[JointType_ElbowLeft]);
+		newA.push_back(a[JointType_WristLeft]);
+		//id: 15
+		newA.push_back(a[JointType_ShoulderRight]);
+		newA.push_back(a[JointType_ElbowRight]);
+		newA.push_back(a[JointType_WristRight]);
+		
+		
+	}
+	return newA;
+}
 vector<MyJoint*> SkinnedModel::getChildren(unsigned int cId)
 {
 	vector<MyJoint*> children;
@@ -170,18 +203,24 @@ vector<MyJoint*> SkinnedModel::getChildren(unsigned int cId)
 	}
 	return children;
 }
-
-void SkinnedModel::loadRotations(vector<quat> &rotations)
+vec3 SkinnedModel::getJointPos(int jointId)
+{
+	MyJoint &joint = joints[jointId];
+	mat44 transform = joint.transform;
+	vec4 v = transform * vec4(joint.pos, 1);
+	return v.toVec3();
+}
+/*void SkinnedModel::loadRotations(vector<quat> &rotations)
 {
 	if (rotations.size()>0)
 	{
-		vector<quat> newRots = convertSkeleton(rotations);
+		vector<quat> newRots = convertArray<quat>(rotations);
 		for (unsigned int i = 0; i < newRots.size(); i++)
 		{
 			MyJoint &joint = joints[i];
 			joint.rotation = newRots[i];
 			joint.rotation.normalize();
-			vec3 pos, parentPos;
+			/*vec3 pos, parentPos;
 			pos = joint.pos;
 			if (joints[i].parentJointId != -1)
 			{
@@ -196,21 +235,21 @@ void SkinnedModel::loadRotations(vector<quat> &rotations)
 			}
 		}
 	}
-	else
+	/*else
 	{
 		joints[15].rotation.setXYZW(0.5f, 0, 0.3f, 0.7f);
 		joints[15].rotation.normalize();
 	}
 	updateTransforms();
-}
+}*/
 
-vector<quat> SkinnedModel::convertSkeleton(vector<quat> rots)
+/*vector<quat> SkinnedModel::convertSkeleton(vector<quat> rots)
 {
 	vector<quat> newRots = convertArray<quat>(rots);
 	return newRots;
-}
+}*/
 
-void SkinnedModel::correctRotation(mat44 &rot, int id)
+/*void SkinnedModel::correctRotation(mat44 &rot, int id)
 {
 	quat tQuat;
 	switch (id)
@@ -222,14 +261,15 @@ void SkinnedModel::correctRotation(mat44 &rot, int id)
 		rot *= mat44::fromAxii(vec3(0, 0, 1), vec3(0, -1, 0), vec3(1, 0, 0));
 		break;
 	}
-}
+}*/
 
 void SkinnedModel::loadKinectPositions(vector<vec3> &positions)
 {
-	vector<vec3> newPositions = convertArray<vec3>(positions);
+	vector<vec3> newPositions = convertVectors(positions);
 	if (positions.size()>0)
 		for (unsigned int i = 0; i < joints.size(); i++)
 			joints[i].kinectPos = newPositions[i];
+	updateTransforms();
 }
 
 quat SkinnedModel::getRotation(vec3 restDir, vec3 kinectDir)
@@ -249,6 +289,7 @@ quat SkinnedModel::getRotation(vec3 restDir, vec3 kinectDir)
 	else
 	{
 		vec3 binormal = kinectDir.cross(normal);
+		binormal.normalize();
 		float cosA = binormal.dot(restDir);
 		angle = 90 + acos(cosA) * 180 / NxPi;
 	}
@@ -259,5 +300,36 @@ quat SkinnedModel::getRotation(vec3 restDir, vec3 kinectDir)
 
 vec3 SkinnedModel::getPelvisPos()
 {
-	return joints[2].kinectPos;
+	vec3 r = joints[2].kinectPos;
+	r.x = -r.x;
+	r.z *= 2;
+	return r;
+}
+/*vec3 SkinnedModel::getLeftPos()
+{
+	vec3 wrist = getJointPos(14);
+	wrist.x = -wrist.x;
+	vec3 pelvis = getPelvisPos();
+	vec3 pos = wrist + pelvis;
+	return pos;
+}*/
+vec3 SkinnedModel::getCorrectedPos(int jid)
+{
+	vec3 pos = getJointPos(jid);
+	pos.x = -pos.x;
+	vec3 pelvis = getPelvisPos();
+	return pos + pelvis;
+}
+/*vec3 SkinnedModel::getRightPos()
+{
+	vec3 wrist = getJointPos(17);
+	wrist.x = -wrist.x;
+	
+}*/
+void SkinnedModel::extendJoint(int jointId, float factor)
+{
+	MyJoint &joint = joints[jointId];
+	MyJoint parent = joints[joint.parentJointId];
+	vec3 diff = joint.pos - parent.pos;
+	joint.pos = parent.pos + diff*factor;
 }

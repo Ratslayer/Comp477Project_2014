@@ -6,12 +6,50 @@ using namespace MyNamespace;
 Renderer* Renderer::_renderer = NULL;
 Renderer::Renderer()
 {
-	pEffect = new Effect("normalTexture.txt", "phongTexture.txt");
+	pEffect = new Effect("vertex1.txt", "colorTexture.txt");
 	pSkinEffect = new Effect("skinned.txt", "color.txt");
 	pPostProcessEffect = new Effect("directTexture.txt", "colorTexture.txt");
-	//pHero = AssetManager::load<SkinnedModel>("hero.txt");
+	pHero = AssetManager::load<SkinnedModel>("hero.txt");
 	pKinect = new KinectController();
 	pScene = AssetManager::load<Scene>("scene.txt");
+
+	pLeft = pScene->getActor<PhysicsObject>("lefthand");
+	pRight = pScene->getActor<PhysicsObject>("righthand");
+	pRightFoot = pScene->getActor<PhysicsObject>("rightfoot");
+	pLeftFoot = pScene->getActor<PhysicsObject>("lefthand");
+	pLeft->bVisible = pRight->bVisible = pRightFoot->bVisible = pLeftFoot->bVisible = false;
+
+	PhysicsDesc pDesc;
+	pDesc.modelName = "box.txt";
+	pDesc.scale = vec3(0.15f, 0.15f, 0.15f);
+	pDesc.type = NxShapeType::NX_SHAPE_BOX;
+	vec3 pyramidPos(0, 0, -3);
+	float distance = 0;
+	int iBase = 5;
+	int iHeight = 0;
+	vector<vec3> positions;
+	vec3 offsetX = vec3(pDesc.scale.x + distance, 0, 0);
+	vec3 offsetZ = vec3(0, 0, pDesc.scale.x + distance);
+	while (iBase > 0)
+	{
+		vec3 offsetY = vec3(0, (pDesc.scale.y + distance)*(float)iHeight, 0);
+		vec3 initPos = pyramidPos + offsetY - (float)iBase / 2.0f *offsetX;
+		for (int i = 0; i < iBase; i++)
+		{
+			for (int j = 0; j < iBase; j++)
+			{
+				vec3 pos = initPos + (float)i*offsetX + (float)j*offsetZ;
+				positions.push_back(pos);
+			}
+		}
+		iHeight++;
+		iBase--;
+	}
+	pScene->multiplyObjects(pDesc, positions);
+	pLeft->actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
+	pRight->actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
+	pLeftFoot->actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
+	pRightFoot->actor->raiseBodyFlag(NxBodyFlag::NX_BF_KINEMATIC);
 	FBODesc desc;
 	desc.width = 1024;
 	desc.height = 768;
@@ -33,22 +71,38 @@ void Renderer::draw()
 {
 	g_physXScene->simulate(g_timeStep);
 	g_physXScene->fetchResults(NxSimulationStatus::NX_ALL_FINISHED);
+
+	pKinect->Update();
+	vec3 pos = vec3();
+	if (pKinect->mainBodyJointPositions.size() > 0)
+	{
+		pHero->loadKinectPositions(pKinect->mainBodyJointPositions);
+		pos = pHero->getPelvisPos();
+		//vec3 leftPos = pHero->getLeftPos();
+		//vec3 rightPos = pHero->getRightPos();
+		//float lMag = leftPos.magnitude(), rMag = rightPos.magnitude();
+		pLeft->actor->moveGlobalPosition(pHero->getCorrectedPos(14));
+		pRight->actor->moveGlobalPosition(pHero->getCorrectedPos(17));
+		pLeftFoot->actor->moveGlobalPosition(pHero->getCorrectedPos(7));
+		pRightFoot->actor->moveGlobalPosition(pHero->getCorrectedPos(11));
+	}
 	pBuffer->bind();
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	drawScene(pScene, pEffect, pBuffer);
 
-	/*pSkinEffect->Bind();
+	pSkinEffect->Bind();
 	quat rot;
 	rot.setXYZW(1, 0, 0, 0); //mat44::getScale(30) * mat44(mat33(rot))*mat44::getTranslation(vec3(20, 10 ,15));
-	pHero->loadRotations(pKinect->mainBodyOrientations);
-	pHero->loadKinectPositions(pKinect->mainBodyJointPositions);
-	vec3 pos = pHero->getPelvisPos();// +vec3(10, 0);
+	//pHero->loadRotations(pKinect->mainBodyOrientations);
+	// +vec3(10, 0);
 	pSkinEffect->getParam("mWorld") = mat44(mat33(rot))* mat44::getTranslation(pos);
-	pScene->pCamera->setPosition(pos + vec3(0, 1, 2));
+	pScene->pCamera->setPosition(pos + vec3(1.5, 0.5, 0));
 	pScene->pCamera->lookAt(pos);
+	vec3 up = pHero->getCorrectedPos(3) - pHero->getCorrectedPos(0);
+	//pScene->pCamera->setUp(up);
 	pScene->pCamera->bind(pSkinEffect);
-	pKinect->Update();
-	pHero->draw(pSkinEffect);*/
+	
+	pHero->draw(pSkinEffect);
 
 	pBuffer->unbind();
 	bindBackBuffer();

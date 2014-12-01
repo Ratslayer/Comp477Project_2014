@@ -274,7 +274,7 @@ void Mesh::generateNormals(vector<vec3> &vertices, vector<unsigned int> &indices
 		vec2 tedge_1 = texCoords[id[0]] - texCoords[id[1]];
 		vec2 tedge_2 = texCoords[id[0]] - texCoords[id[2]];
 
-		vec3 normal = edge_1.cross(edge_2);
+		vec3 normal = -edge_1.cross(edge_2);
 		vec3 tangent((tedge_2.y * edge_1.x - tedge_1.y * edge_2.x),
 			(tedge_2.y * edge_1.y - tedge_1.y * edge_2.y),
 			(tedge_2.y * edge_1.z - tedge_1.y * edge_2.z));

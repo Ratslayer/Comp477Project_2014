@@ -111,10 +111,10 @@
     <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedModel.h">
+    <ClInclude Include="PhysicsObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsObject.h">
+    <ClInclude Include="SkinnedModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

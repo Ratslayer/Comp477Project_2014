@@ -13,8 +13,8 @@ layout(location=0) out vec4 diffuseColor;
 void main()
 {
 	vec3 normalDir=normalize(fNormal);
-	vec3 viewDir=normalize(fPosition-f3CameraPos);
-	vec3 lightDir=normalize(fPosition-f3LightPos);
+	vec3 viewDir=normalize(f3CameraPos-fPosition);
+	vec3 lightDir=normalize(f3LightPos-fPosition);
 	vec3 lighting=f3LightColor * dot(normalDir, lightDir) * fBrightness;
 	vec3 hn=normalize(viewDir+lightDir);
 	float specular=pow(dot(normalDir, hn), 55.0);

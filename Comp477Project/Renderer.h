@@ -15,7 +15,7 @@ namespace MyNamespace
 	{
 	private:
 		static Renderer* _renderer;
-		
+		PhysicsObject *pLeft, *pRight, *pRightFoot, *pLeftFoot;
 		SkinnedModel *pHero;
 		Effect *pEffect, *pPostProcessEffect, *pSkinEffect;
 		FrameBuffer *pBuffer;
@@ -29,6 +29,7 @@ namespace MyNamespace
 		void drawFullscreenQuad();
 		void drawScene(Scene* scene, Effect* effect, FrameBuffer *buffer);
 		void drawLines(vector<vec3> vertices, vec3 color);
+
 	public:
 		Renderer();
 		~Renderer();
@@ -36,7 +37,7 @@ namespace MyNamespace
 		static Renderer* getRenderer();
 		static void init();
 		static void release();
-		
+
 		void clear();
 		void draw();
 		void bindBackBuffer();

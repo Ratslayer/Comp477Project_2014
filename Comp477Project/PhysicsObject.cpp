@@ -1,7 +1,16 @@
 #include "stdafx.h"
 #include "PhysicsObject.h"
 
-
+PhysicsDesc::PhysicsDesc()
+{
+	name = "";
+	scale = vec3(1, 1, 1);
+	this->type = NxShapeType::NX_SHAPE_MESH;
+	this->velocity = vec3(0, 0, 0);
+	this->modelName = "";
+	position = vec3(0, 0, 0);
+	rotation.id();
+}
 PhysicsObject::PhysicsObject()
 {
 }
@@ -10,7 +19,6 @@ PhysicsObject::PhysicsObject()
 PhysicsObject::~PhysicsObject()
 {
 }
-
 void PhysicsObject::loadFromDesc(ActorDesc &desc)
 {
 	GameObject::loadFromDesc(desc);
@@ -31,7 +39,8 @@ void PhysicsObject::loadFromDesc(ActorDesc &desc)
 		actorDesc.body = &bodyDesc;
 		actorDesc.density = 1.0f;
 		boxDesc.localPose.t = pMesh->center;
-		boxDesc.dimensions = (pMesh->maxB - pMesh->minB) * scale;
+		boxDesc.dimensions = (pMesh->maxB - pMesh->minB) * scale / 2;
+		//boxDesc.dimensions.z = boxDesc.dimensions.z - 0.5f * scale.z;
 		actorDesc.shapes.pushBack(&boxDesc);
 		break;
 	case NX_SHAPE_SPHERE:
@@ -59,6 +68,7 @@ vec3 PhysicsObject::getPosition()
 	vec3 pos = actor->getGlobalPosition();
 	if (n > 0)
 		pos = shapes[0]->getGlobalPosition();
+	//actor->
 	return pos;
 }
 

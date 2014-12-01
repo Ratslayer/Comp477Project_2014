@@ -81,7 +81,7 @@ void MyNamespace::Window::initPhysX()
 
 	// gPhysicsSDK->setParameter(NX_SKIN_WIDTH, 0.05f*(1.0f /scale)); 
 	g_pSDK->setParameter(NX_SKIN_WIDTH, 0.005f*(1.0f / scale));
-	g_pSDK->setParameter(NX_DEFAULT_SLEEP_LIN_VEL_SQUARED, 0.001f*0.001*(1 / scale)*(1 / scale));
+	g_pSDK->setParameter(NX_DEFAULT_SLEEP_LIN_VEL_SQUARED, 0.001f*0.001f*(1 / scale)*(1 / scale));
 	g_pSDK->setParameter(NX_BOUNCE_THRESHOLD, -2 * (1.0f / scale));
 	g_pSDK->setParameter(NX_VISUALIZATION_SCALE, 0.5f*(1.0f / scale));
 

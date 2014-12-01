@@ -1,0 +1,49 @@
+#main camera
+[camera]
+name=MainCamera
+position=0 2 10
+lookat=0 0 0
+fovy=90
+nearz=1
+farz=1000
+[gameobject]
+name=SkyBox
+position=0 0 0
+model=skybox.txt
+scale=500 500 500
+[PhysicsObject]
+name="Box"
+position=0 2 0
+model=box.txt
+scale=1 1 1
+shape=box
+[PhysicsObject]
+name="Box"
+position=1 2 0
+model=box.txt
+scale=1 1 1
+shape=box
+[PhysicsObject]
+name="Box"
+position=1 4 0
+model=box.txt
+scale=0.3 0.5 0.5
+shape=box
+[PhysicsObject]
+name="Box"
+position=0 3 0
+model=box.txt
+scale=1 1 1
+shape=box
+[PhysicsObject]
+name=Floor
+rotation=0.707 0 0 0.707
+position=0 0 0
+model=floor.txt
+scale=100 100 100
+shape=plane
+[light]
+name=Light0
+position=0 20 0
+color=1 1 1
+brightness=1

@@ -5,7 +5,7 @@ class MyJoint
 public:
 	vec3 pos;
 	vec3 kinectPos;
-	quat rotation;
+	//quat rotation;
 	mat44 transform;
 	int parentJointId;
 };
@@ -17,12 +17,19 @@ public:
 	virtual ~SkinnedModel();
 	void loadFromFile(string fileName);
 	string getClassName(){ return "SkinnedModel"; }
-	void loadRotations(vector<quat> &rotations);
+	//void loadRotations(vector<quat> &rotations);
 	void loadKinectPositions(vector<vec3> &positions);
 	vec3 getPelvisPos();
 	void draw(Effect* effect);
+	vec3 getJointPos(int jointId);
+	vec3 getLeftPos();
+	vec3 getRightPos();
+	vec3 getCorrectedPos(int jid);
 private:
-	template<typename T>
+	void extendJoint(int jointId, float factor);
+	
+	vector<vec3> convertVectors(vector<vec3> &vs);
+	/*template<typename T>
 	vector<T> convertArray(vector<T> &a)
 	{
 		vector<T> newA;
@@ -49,12 +56,10 @@ private:
 			//id: 15
 			newA.push_back(a[JointType_ShoulderRight]);
 			newA.push_back(a[JointType_ElbowRight]);
-			newA.push_back(a[JointType_WristRight]);
-			
-			
+			newA.push_back(a[JointType_WristRight]);			
 		}
 		return newA;
-	}
+	}*/
 	vector<float> weights;
 	vector<MyJoint> joints;
 	GLuint iWeights1VBO, iWeights2VBO, iWeights3VBO, iWeights4VBO, iWeights5VBO, iWeights6VBO;
@@ -63,9 +68,9 @@ private:
 	mat44 getTransform(int jointId);
 	quat getRotation(vec3 restDir, vec3 kinectDir);
 	void updateTransforms();
-	vector<quat> convertSkeleton(vector<quat> rots);
+	//vector<quat> convertSkeleton(vector<quat> rots);
 	vector<MyJoint*> getChildren(unsigned int cId);
-	void correctRotation(mat44 &rot, int id);
+	//void correctRotation(mat44 &rot, int id);
 	//unsigned int getRootJointId();
 
 };

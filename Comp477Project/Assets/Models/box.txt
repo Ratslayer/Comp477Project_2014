@@ -1,2 +1,2 @@
-mesh=box.ASE
+mesh=cbox.ASE
 material=checker.txt

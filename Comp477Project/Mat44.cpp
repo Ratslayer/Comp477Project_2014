@@ -33,7 +33,15 @@ Vec4 Mat44::getCol(int i)
 {
 	return vec4(values[i], values[i + 4], values[i + 8], values[i + 12]);
 }
-
+vec4 Mat44::operator *(vec4 &v)
+{
+	vec4 r;
+	r.x = this->getCol(0).dot(v);
+	r.y = this->getCol(1).dot(v);
+	r.z = this->getCol(2).dot(v);
+	r.w = this->getCol(3).dot(v);
+	return r;
+}
 Mat44 Mat44::operator *(Mat44 &m)
 {
 	Mat44 mat;

@@ -33,6 +33,7 @@ public:
 	vec3 position, velocity;
 	quat rotation;
 	string name;
+	bool bVisible;
 protected:
 	virtual void virtualTrigger(){}
 	BindingCollection bindings;
@@ -41,6 +42,7 @@ class Actor
 {
 public:
 	Actor();
+	bool bVisible = true;
 	virtual ~Actor();
 	std::string name;
 	template<typename T>

@@ -10,6 +10,7 @@ public:
 	Vec4 getRow(int i);
 	Vec4 getCol(int i);
 	Mat44 operator *(Mat44 &m);
+	vec4 operator *(vec4 &v);
 	void operator *=(Mat44 &m);
 	//Mat44& operator =(mat33 &m);
 	//static methods
